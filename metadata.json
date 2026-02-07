@@ -1,0 +1,5 @@
+{
+  "name": "Fund Chart Builder",
+  "description": "A professional-grade fund comparison tool. Upload CSV NAV data to visualize performance, calculate risk metrics, and annotate market events.",
+  "requestFramePermissions": []
+}
