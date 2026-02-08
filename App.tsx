@@ -4,13 +4,14 @@ import { FundChart } from './components/FundChart';
 import { DataRestructurer } from './components/DataRestructurer';
 import { parseCSV, normalizeDataset } from './utils/csvParser';
 import { FundDataset, Language } from './types';
-import { 
-  LineChart, 
-  BarChart3, 
-  RefreshCcw, 
-  DollarSign, 
-  Database, 
-  FileUp, 
+import { FinancialMetrics } from './components/FinancialMetrics';
+import {
+  LineChart,
+  BarChart3,
+  RefreshCcw,
+  DollarSign,
+  Database,
+  FileUp,
   Activity,
   TrendingUp,
   Zap,
@@ -111,16 +112,16 @@ const App: React.FC = () => {
               </p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1 bg-surface-100 p-1 rounded-md border border-surface-200">
-              <button 
+              <button
                 onClick={() => setLang('en')}
                 className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'en' ? 'bg-white text-brand-700 shadow-sm border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
               >
                 EN
               </button>
-              <button 
+              <button
                 onClick={() => setLang('cn')}
                 className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'cn' ? 'bg-white text-brand-700 shadow-sm border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
               >
@@ -129,7 +130,7 @@ const App: React.FC = () => {
             </div>
 
             {dataset && (
-              <button 
+              <button
                 onClick={handleReset}
                 className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-surface-600 hover:text-brand-600 transition-colors bg-white border border-surface-200 rounded-md shadow-sm"
               >
@@ -155,31 +156,31 @@ const App: React.FC = () => {
             </div>
 
             <div className="flex bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm">
-                <button 
-                    onClick={() => setInputMode('upload')}
-                    className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === 'upload' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
-                >
-                    <FileUp className="w-4 h-4" />
-                    {t.upload}
-                </button>
-                <button 
-                    onClick={() => setInputMode('restructure')}
-                    className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === 'restructure' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
-                >
-                    <Database className="w-4 h-4" />
-                    {t.builder}
-                </button>
+              <button
+                onClick={() => setInputMode('upload')}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === 'upload' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
+              >
+                <FileUp className="w-4 h-4" />
+                {t.upload}
+              </button>
+              <button
+                onClick={() => setInputMode('restructure')}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === 'restructure' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
+              >
+                <Database className="w-4 h-4" />
+                {t.builder}
+              </button>
             </div>
 
             <div className="w-full max-w-4xl">
               {inputMode === 'upload' ? (
-                  <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
-                    <FileUpload onDataLoaded={handleDataLoaded} lang={lang} />
-                  </div>
+                <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
+                  <FileUpload onDataLoaded={handleDataLoaded} lang={lang} />
+                </div>
               ) : (
-                  <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
-                    <DataRestructurer onComplete={handleRestructureComplete} lang={lang} />
-                  </div>
+                <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
+                  <DataRestructurer onComplete={handleRestructureComplete} lang={lang} />
+                </div>
               )}
             </div>
 
@@ -195,30 +196,28 @@ const App: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                   <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-2 py-0.5 rounded border border-brand-100">{t.review}</span>
+                  <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-2 py-0.5 rounded border border-brand-100">{t.review}</span>
                 </div>
                 <h2 className="text-3xl font-extrabold tracking-tight text-surface-900">{t.perfTitle}</h2>
               </div>
-              
+
               <div className="bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm flex items-center">
                 <button
                   onClick={() => setViewMode('normalized')}
-                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
-                    viewMode === 'normalized' 
-                      ? 'bg-white text-brand-700 shadow-md border border-surface-200' 
-                      : 'text-surface-500 hover:text-surface-700'
-                  }`}
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewMode === 'normalized'
+                    ? 'bg-white text-brand-700 shadow-md border border-surface-200'
+                    : 'text-surface-500 hover:text-surface-700'
+                    }`}
                 >
                   <TrendingUp className="w-3.5 h-3.5" />
                   {t.rebased}
                 </button>
                 <button
                   onClick={() => setViewMode('raw')}
-                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
-                    viewMode === 'raw' 
-                      ? 'bg-white text-brand-700 shadow-md border border-surface-200' 
-                      : 'text-surface-500 hover:text-surface-700'
-                  }`}
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewMode === 'raw'
+                    ? 'bg-white text-brand-700 shadow-md border border-surface-200'
+                    : 'text-surface-500 hover:text-surface-700'
+                    }`}
                 >
                   <DollarSign className="w-3.5 h-3.5" />
                   {t.marketVal}
@@ -232,33 +231,37 @@ const App: React.FC = () => {
               </div>
               <FundChart dataset={chartDataset} viewMode={viewMode} lang={lang} />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                  <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.records}</span>
-                  <div className="flex items-end justify-between">
-                    <p className="text-3xl font-extrabold text-surface-900">{dataset.data.length.toLocaleString()}</p>
-                    <LineChart className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
-                  </div>
-               </div>
-               <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                  <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.assets}</span>
-                  <div className="flex items-end justify-between">
-                    <p className="text-3xl font-extrabold text-surface-900">{dataset.funds.length}</p>
-                    <Database className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
-                  </div>
-               </div>
-               <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                  <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.window}</span>
-                  <div className="flex items-end justify-between">
-                    <p className="text-sm font-bold text-surface-900 leading-tight">
-                      <span className="text-brand-600 tabular-nums">{dataset.data[0]?.date}</span>
-                      <span className="block text-[10px] text-surface-400 my-0.5 uppercase tracking-tighter">{t.to}</span>
-                      <span className="text-brand-600 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
-                    </p>
-                    <Settings className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
-                  </div>
-               </div>
+              <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.records}</span>
+                <div className="flex items-end justify-between">
+                  <p className="text-3xl font-extrabold text-surface-900">{dataset.data.length.toLocaleString()}</p>
+                  <LineChart className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                </div>
+              </div>
+              <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.assets}</span>
+                <div className="flex items-end justify-between">
+                  <p className="text-3xl font-extrabold text-surface-900">{dataset.funds.length}</p>
+                  <Database className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                </div>
+              </div>
+              <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.window}</span>
+                <div className="flex items-end justify-between">
+                  <p className="text-sm font-bold text-surface-900 leading-tight">
+                    <span className="text-brand-600 tabular-nums">{dataset.data[0]?.date}</span>
+                    <span className="block text-[10px] text-surface-400 my-0.5 uppercase tracking-tighter">{t.to}</span>
+                    <span className="text-brand-600 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
+                  </p>
+                  <Settings className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                </div>
+              </div>
+            </div>
+
+            <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+              <FinancialMetrics dataset={chartDataset} lang={lang} />
             </div>
 
             <div className="bg-white border border-surface-200 overflow-hidden shadow-lg rounded-3xl">
@@ -287,7 +290,7 @@ const App: React.FC = () => {
                         <td className="px-6 py-4 font-bold text-surface-900">{row.date}</td>
                         {dataset.funds.map(f => (
                           <td key={f} className="px-6 py-4 text-surface-600 tabular-nums group-hover:text-brand-700">
-                              {row[f] !== null && row[f] !== undefined ? (row[f] as number).toLocaleString(undefined, {minimumFractionDigits: 2}) : '-'}
+                            {row[f] !== null && row[f] !== undefined ? (row[f] as number).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}
                           </td>
                         ))}
                       </tr>
@@ -304,7 +307,7 @@ const App: React.FC = () => {
           </div>
         )}
       </main>
-      
+
       <footer className="py-16 text-center border-t border-surface-200 mt-20 bg-white">
         <div className="bg-brand-50 w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-4 border border-brand-100">
           <Zap className="w-5 h-5 text-brand-600" />
