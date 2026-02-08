@@ -3,24 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fund Chart Builder | Institutional Hub</title>
+    <title>Fund Chart Builder | Institutional Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              serif: ['Playfair Display', 'serif'],
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
             },
             colors: {
-              bank: {
-                navy: '#0f172a',
-                gold: '#b59a5d',
-                goldLight: '#d4c391',
-                cream: '#fdfcf8',
-                obsidian: '#020617',
+              brand: {
+                50: '#f5f7ff',
+                100: '#ebf0fe',
+                200: '#dae3fe',
+                300: '#b8c9fd',
+                400: '#8fa8fa',
+                500: '#637df7',
+                600: '#4a57f2',
+                700: '#3c42e0',
+                800: '#3237b6',
+                900: '#2d3191',
+                950: '#1e2056',
+              },
+              surface: {
+                50: '#fafafa',
+                100: '#f4f4f5',
+                200: '#e4e4e7',
+                300: '#d4d4d8',
+                400: '#a1a1aa',
+                500: '#71717a',
+                900: '#18181b',
               }
             }
           }
@@ -29,19 +44,25 @@
     </script>
     <style>
       body {
-        background-color: #fcfbf7;
-        color: #0f172a;
+        background-color: #fafafa;
+        color: #18181b;
+        -webkit-font-smoothing: antialiased;
       }
-      .gold-gradient {
-        background: linear-gradient(135deg, #b59a5d 0%, #d4c391 100%);
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(228, 228, 231, 0.5);
       }
-      .navy-gradient {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      .card-shadow {
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
       }
-      .glass-card {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(181, 154, 93, 0.2);
+      .hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
       }
     </style>
   <script type="importmap">

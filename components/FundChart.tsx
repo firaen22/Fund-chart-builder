@@ -12,7 +12,7 @@ import {
   Label
 } from 'recharts';
 import { FundDataset, Language } from '../types';
-import { X, FileText, Target, MessageSquarePlus, Eye, EyeOff } from 'lucide-react';
+import { X, FileText, Target, MessageSquarePlus, Eye, EyeOff, Calendar } from 'lucide-react';
 
 interface FundChartProps {
   dataset: FundDataset;
@@ -20,7 +20,15 @@ interface FundChartProps {
   lang: Language;
 }
 
-const COLORS = ['#b59a5d', '#0f172a', '#64748b', '#94a3b8', '#1e293b', '#475569'];
+// Modern professional color palette
+const COLORS = [
+  '#4a57f2', // Indigo
+  '#0d9488', // Teal
+  '#db2777', // Pink
+  '#ea580c', // Orange
+  '#7c3aed', // Violet
+  '#2563eb', // Blue
+];
 
 export const FundChart: React.FC<FundChartProps> = ({ dataset, viewMode = 'raw', lang }) => {
   const [annotations, setAnnotations] = useState<Record<string, string>>({});
@@ -28,26 +36,26 @@ export const FundChart: React.FC<FundChartProps> = ({ dataset, viewMode = 'raw',
 
   const t = {
     en: {
-      indexed: "Indexed Appreciation (Base 100)",
-      absolute: "Absolute Market Valuation",
+      indexed: "Indexed Performance (Base 100)",
+      absolute: "Nominal Asset Value",
       audit: "Real-time Comparative Audit",
-      probe: "Interactive Intersect Probe",
-      spotTitle: "Spot Valuation Briefing",
-      notePlaceholder: "Add optional market note...",
-      eventLabel: "Market Note (Optional)",
-      toggleShow: "Show Labels",
-      toggleHide: "Hide Labels"
+      probe: "Data Inspector",
+      spotTitle: "Regional Market Analysis",
+      notePlaceholder: "Add context note...",
+      eventLabel: "Annotation (Optional)",
+      toggleShow: "Show Annotations",
+      toggleHide: "Hide Annotations"
     },
     cn: {
-      indexed: "指數增值（基準 100）",
-      absolute: "絕對市場估值",
-      audit: "實時對比審計",
-      probe: "交互式交叉探測",
-      spotTitle: "即時估值簡報",
-      notePlaceholder: "添加市場備註（可選）...",
-      eventLabel: "市場備註（可選）",
-      toggleShow: "顯示標籤",
-      toggleHide: "隱藏標籤"
+      indexed: "歸一化績效 (基準 100)",
+      absolute: "標稱資產價值",
+      audit: "實時比較審計",
+      probe: "數據探測器",
+      spotTitle: "市場分析摘要",
+      notePlaceholder: "添加背景備註...",
+      eventLabel: "備註 (可選)",
+      toggleShow: "顯示備註",
+      toggleHide: "隱藏備註"
     }
   }[lang];
 
@@ -75,17 +83,22 @@ export const FundChart: React.FC<FundChartProps> = ({ dataset, viewMode = 'raw',
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-bank-navy p-4 border border-bank-gold/20 shadow-2xl">
-          <p className="text-bank-gold text-xs font-bold mb-2 border-b border-white/10 pb-1">{label}</p>
+        <div className="bg-surface-900 text-white p-4 border border-surface-700 shadow-2xl rounded-xl">
+          <p className="text-surface-400 text-[10px] font-bold mb-3 border-b border-surface-800 pb-2 uppercase tracking-widest">{label}</p>
           <div className="space-y-3">
             {payload.map((item: any) => (
               <div key={item.dataKey} className="flex flex-col">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-white text-[10px] font-black uppercase tracking-widest">{item.name}</span>
-                  <span className="text-bank-gold font-mono font-bold text-xs">{item.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                <div className="flex items-center justify-between gap-6">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: item.color }}></div>
+                    <span className="text-white text-[11px] font-bold tracking-tight">{item.name}</span>
+                  </div>
+                  <span className="text-brand-300 font-mono font-bold text-xs tabular-nums">
+                    {item.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </span>
                 </div>
                 {dataset.metadata?.[item.name]?.description && (
-                  <span className="text-white/40 text-[9px] font-serif italic">{dataset.metadata[item.name].description}</span>
+                  <span className="text-surface-500 text-[9px] mt-0.5 ml-3.5 italic">{dataset.metadata[item.name].description}</span>
                 )}
               </div>
             ))}
@@ -97,23 +110,26 @@ export const FundChart: React.FC<FundChartProps> = ({ dataset, viewMode = 'raw',
   };
 
   return (
-    <div className="w-full flex flex-col gap-8">
-      <div className="flex items-center justify-between border-b border-bank-gold/10 pb-6">
+    <div className="w-full flex flex-col gap-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-xl font-serif font-bold text-bank-navy">
+          <h3 className="text-xl font-extrabold text-surface-900 tracking-tight">
             {viewMode === 'normalized' ? t.indexed : t.absolute}
           </h3>
-          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-1">{t.audit}</p>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-brand-500"></div>
+            <p className="text-[10px] text-surface-500 font-bold uppercase tracking-widest">{t.audit}</p>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <button 
             onClick={() => setShowLabels(!showLabels)}
-            className="text-[10px] font-black text-slate-400 hover:text-bank-gold uppercase tracking-widest flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-100 transition-all rounded-sm"
+            className="text-[10px] font-bold text-surface-600 hover:text-brand-600 hover:bg-brand-50 transition-all flex items-center gap-2 px-3 py-2 bg-surface-100 border border-surface-200 rounded-lg"
           >
             {showLabels ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-            <span>{showLabels ? t.toggleHide : t.toggleShow}</span>
+            <span className="hidden sm:inline">{showLabels ? t.toggleHide : t.toggleShow}</span>
           </button>
-          <div className="text-[10px] font-black text-bank-gold uppercase tracking-widest flex items-center gap-2 px-4 py-2 bg-bank-cream border border-bank-gold/20 rounded-sm">
+          <div className="text-[10px] font-bold text-brand-700 bg-brand-50 border border-brand-100 px-3 py-2 rounded-lg flex items-center gap-2">
             <Target className="w-3.5 h-3.5" />
             <span>{t.probe}</span>
           </div>
@@ -123,23 +139,39 @@ export const FundChart: React.FC<FundChartProps> = ({ dataset, viewMode = 'raw',
       <div className="h-[500px] w-full relative">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={dataset.data} onClick={handleChartClick} margin={{ top: 50, right: 30, left: 10, bottom: 20 }}>
-            <CartesianGrid strokeDasharray="1 1" stroke="#f1f5f9" vertical={false} />
-            <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 'bold' }} stroke="#e2e8f0" tickMargin={15} />
-            <YAxis tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 'bold' }} domain={['auto', 'auto']} stroke="#e2e8f0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#f1f1f4" vertical={false} />
+            <XAxis 
+              dataKey="date" 
+              tick={{ fontSize: 10, fill: '#71717a', fontWeight: 600 }} 
+              stroke="#e4e4e7" 
+              tickMargin={15} 
+            />
+            <YAxis 
+              tick={{ fontSize: 10, fill: '#71717a', fontWeight: 600 }} 
+              domain={['auto', 'auto']} 
+              stroke="#e4e4e7" 
+              tickMargin={10}
+            />
             <Tooltip content={<CustomTooltip />} />
-            <Legend verticalAlign="top" align="right" height={36} iconType="rect" wrapperStyle={{ paddingBottom: '30px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em' }} />
+            <Legend 
+              verticalAlign="top" 
+              align="right" 
+              height={50} 
+              iconType="circle" 
+              wrapperStyle={{ paddingBottom: '30px', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }} 
+            />
             
             {Object.entries(annotations).map(([date, text]) => (
-              <ReferenceLine key={date} x={date} stroke="#b59a5d" strokeWidth={1} strokeDasharray="3 3">
+              <ReferenceLine key={date} x={date} stroke="#637df7" strokeWidth={1.5} strokeDasharray="4 4">
                 {showLabels && text && (
                   <Label 
                     value={text} 
                     position="top" 
-                    fill="#b59a5d" 
-                    fontSize={9} 
-                    fontWeight="bold" 
-                    className="uppercase tracking-widest"
-                    offset={15}
+                    fill="#4a57f2" 
+                    fontSize={10} 
+                    fontWeight={800} 
+                    className="uppercase tracking-widest bg-white"
+                    offset={20}
                   />
                 )}
               </ReferenceLine>
@@ -153,9 +185,10 @@ export const FundChart: React.FC<FundChartProps> = ({ dataset, viewMode = 'raw',
                 stroke={COLORS[index % COLORS.length]}
                 strokeWidth={index === 0 ? 3 : 2}
                 dot={false}
-                activeDot={{ r: 5, stroke: '#fff', strokeWidth: 2 }}
+                activeDot={{ r: 6, stroke: '#fff', strokeWidth: 2, fill: COLORS[index % COLORS.length] }}
                 connectNulls={true}
-                animationDuration={1500}
+                animationDuration={1200}
+                animationEasing="ease-out"
               />
             ))}
           </LineChart>
@@ -163,56 +196,66 @@ export const FundChart: React.FC<FundChartProps> = ({ dataset, viewMode = 'raw',
       </div>
 
       {Object.keys(annotations).length > 0 && (
-        <div className="animate-in slide-in-from-bottom-4">
-          <h4 className="text-[10px] font-black text-bank-navy uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
-            <FileText className="w-4 h-4 text-bank-gold" />
-            {t.spotTitle}
-          </h4>
+        <div className="animate-in fade-in slide-in-from-bottom-4 space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="w-1 h-4 bg-brand-500 rounded-full"></div>
+            <h4 className="text-[10px] font-black text-surface-900 uppercase tracking-widest">
+              {t.spotTitle}
+            </h4>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Object.keys(annotations).sort().map(date => {
               const point = getDataForDate(date);
               if (!point) return null;
               return (
-                <div key={date} className="bg-white border border-bank-gold/20 p-6 relative shadow-lg hover:shadow-xl transition-all group rounded-sm">
+                <div key={date} className="bg-white border border-surface-200 p-6 relative shadow-sm hover:shadow-md transition-all rounded-2xl group flex flex-col">
                   <button 
                     onClick={() => setAnnotations(prev => {
                       const next = { ...prev };
                       delete next[date];
                       return next;
                     })} 
-                    className="absolute top-3 right-3 text-slate-300 hover:text-red-500 transition-colors"
+                    className="absolute top-4 right-4 text-surface-300 hover:text-red-500 transition-colors p-1 hover:bg-red-50 rounded-lg"
                   >
                     <X className="w-4 h-4" />
                   </button>
                   
-                  <div className="font-serif font-bold text-bank-navy text-lg mb-4 border-b border-bank-gold/10 pb-2">{date}</div>
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="bg-brand-50 p-2 rounded-lg text-brand-600">
+                      <Calendar className="w-4 h-4" />
+                    </div>
+                    <span className="font-bold text-surface-900 text-lg tabular-nums tracking-tight">{date}</span>
+                  </div>
                   
-                  <div className="space-y-4 mb-6">
+                  <div className="space-y-3 mb-6 flex-grow">
                     {dataset.funds.map((fund, idx) => (
-                      <div key={fund} className="flex flex-col text-[10px]">
+                      <div key={fund} className="flex flex-col text-[11px]">
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-400 font-black uppercase tracking-tighter truncate max-w-[120px]">{fund}</span>
-                          <span className="font-mono font-bold text-bank-navy">
-                            {point[fund] !== null ? (point[fund] as number).toLocaleString(undefined, { minimumFractionDigits: 2 }) : 'N/A'}
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div>
+                            <span className="text-surface-500 font-bold uppercase tracking-tight truncate max-w-[120px]">{fund}</span>
+                          </div>
+                          <span className="font-mono font-bold text-surface-900 tabular-nums">
+                            {point[fund] !== null ? (point[fund] as number).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '—'}
                           </span>
                         </div>
                         {dataset.metadata?.[fund]?.description && (
-                          <span className="text-[8px] text-slate-300 font-serif italic truncate">{dataset.metadata[fund].description}</span>
+                          <span className="text-[9px] text-surface-400 font-medium ml-3 italic truncate">{dataset.metadata[fund].description}</span>
                         )}
                       </div>
                     ))}
                   </div>
 
-                  <div className="relative mt-4 pt-4 border-t border-slate-50">
-                    <div className="flex items-center gap-2 mb-2 text-[8px] font-black text-bank-gold uppercase tracking-widest opacity-60">
-                      <MessageSquarePlus className="w-3 h-3" />
+                  <div className="relative mt-auto pt-5 border-t border-surface-100">
+                    <div className="flex items-center gap-2 mb-3 text-[9px] font-bold text-brand-600 uppercase tracking-wider">
+                      <MessageSquarePlus className="w-3.5 h-3.5" />
                       {t.eventLabel}
                     </div>
                     <textarea
                       value={annotations[date]}
                       onChange={(e) => updateAnnotation(date, e.target.value)}
                       placeholder={t.notePlaceholder}
-                      className="w-full bg-bank-cream/50 border border-bank-gold/5 p-3 text-[11px] font-serif italic text-bank-navy focus:border-bank-gold focus:outline-none transition-all rounded-sm resize-none h-16 placeholder:opacity-30"
+                      className="w-full bg-surface-50 border border-surface-200 p-3 text-[12px] text-surface-900 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none transition-all rounded-xl resize-none h-20 placeholder:text-surface-300"
                     />
                   </div>
                 </div>

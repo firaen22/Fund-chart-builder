@@ -5,15 +5,18 @@ import { DataRestructurer } from './components/DataRestructurer';
 import { parseCSV, normalizeDataset } from './utils/csvParser';
 import { FundDataset, Language } from './types';
 import { 
-  Compass, 
+  LineChart, 
   BarChart3, 
-  RefreshCw, 
+  RefreshCcw, 
   DollarSign, 
   Database, 
   FileUp, 
-  ShieldCheck,
+  Activity,
   TrendingUp,
-  Award
+  Zap,
+  Globe,
+  Settings,
+  ShieldCheck
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -26,41 +29,41 @@ const App: React.FC = () => {
   const t = {
     en: {
       title: "Fund Chart Builder",
-      subtitle: "Institutional Asset Visualization",
+      subtitle: "Professional Analytics Engine",
       reset: "Reset Terminal",
-      ingestion: "Portfolio Ingestion",
-      ingestionSub: "Securely import your financial data to begin high-conviction quantitative auditing.",
-      upload: "Secure Upload",
+      ingestion: "Data Ingestion",
+      ingestionSub: "Connect your financial datasets to initialize professional-grade performance visualization.",
+      upload: "CSV Upload",
       builder: "Asset Builder",
-      review: "Quantitative Review",
-      perfTitle: "Portfolio Performance",
-      rebased: "Index 100",
-      marketVal: "Market Value",
-      records: "Ingested Records",
-      assets: "Constituent Assets",
-      window: "Fiscal Window",
-      registry: "Transaction Registry (Sample)",
+      review: "Performance Analytics",
+      perfTitle: "Portfolio Overview",
+      rebased: "Normalized (Base 100)",
+      marketVal: "Nominal Values",
+      records: "Data Points",
+      assets: "Assets",
+      window: "Date Range",
+      registry: "Historical Ledger",
       to: "to",
-      error: "Security protocols prevented parsing."
+      error: "Data parsing failed. Check format integrity."
     },
     cn: {
       title: "基金圖表構建器",
-      subtitle: "機構級資產視覺化中心",
-      reset: "重置終端",
-      ingestion: "資產數據錄入",
-      ingestionSub: "安全導入您的財務數據，開始高標準的量化審計。",
-      upload: "安全上傳",
+      subtitle: "專業分析引擎",
+      reset: "重置控制台",
+      ingestion: "數據導入",
+      ingestionSub: "連接您的財務數據集，以初始化專業級的績效視覺化。",
+      upload: "CSV 上傳",
       builder: "資產構建器",
-      review: "量化評估",
-      perfTitle: "投資組合表現",
-      rebased: "基準 100",
-      marketVal: "市場價值",
-      records: "錄入紀錄",
-      assets: "成分資產",
-      window: "財政週期",
-      registry: "交易紀錄（示例）",
+      review: "績效分析",
+      perfTitle: "投資組合概覽",
+      rebased: "歸一化 (基準 100)",
+      marketVal: "標稱價值",
+      records: "數據點",
+      assets: "資產數量",
+      window: "日期範圍",
+      registry: "歷史台賬",
       to: "至",
-      error: "安全協議阻止了數據解析。"
+      error: "數據解析失敗。請檢查格式完整性。"
     }
   }[lang];
 
@@ -92,45 +95,45 @@ const App: React.FC = () => {
   }, [dataset, viewMode]);
 
   return (
-    <div className="min-h-screen font-sans">
-      <header className="bg-bank-obsidian border-b border-bank-gold/20 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-bank-gold p-2.5 rounded-sm">
-              <Compass className="w-6 h-6 text-bank-obsidian" />
+    <div className="min-h-screen bg-surface-50 text-surface-900 selection:bg-brand-100 selection:text-brand-900">
+      <header className="sticky top-0 z-50 glass-effect border-b border-surface-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-brand-600 p-2 rounded-lg text-white">
+              <Zap className="w-5 h-5 fill-current" />
             </div>
             <div>
-              <h1 className="text-xl font-serif font-bold text-white tracking-widest uppercase">
+              <h1 className="text-lg font-bold tracking-tight text-surface-900">
                 {t.title}
               </h1>
-              <p className="text-[10px] text-bank-gold font-bold uppercase tracking-[0.2em] opacity-80">
+              <p className="text-[10px] text-surface-500 font-medium uppercase tracking-wider">
                 {t.subtitle}
               </p>
             </div>
           </div>
           
-          <div className="flex items-center gap-6">
-            <div className="flex bg-white/5 p-1 rounded-sm border border-white/10">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 bg-surface-100 p-1 rounded-md border border-surface-200">
               <button 
                 onClick={() => setLang('en')}
-                className={`px-3 py-1 text-[9px] font-black tracking-widest uppercase rounded-sm transition-all ${lang === 'en' ? 'bg-bank-gold text-bank-obsidian' : 'text-white/40 hover:text-white'}`}
+                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'en' ? 'bg-white text-brand-700 shadow-sm border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
               >
                 EN
               </button>
               <button 
                 onClick={() => setLang('cn')}
-                className={`px-3 py-1 text-[9px] font-black tracking-widest uppercase rounded-sm transition-all ${lang === 'cn' ? 'bg-bank-gold text-bank-obsidian' : 'text-white/40 hover:text-white'}`}
+                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'cn' ? 'bg-white text-brand-700 shadow-sm border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
               >
-                繁體
+                CN
               </button>
             </div>
 
             {dataset && (
               <button 
                 onClick={handleReset}
-                className="flex items-center gap-2 text-xs text-bank-gold/60 hover:text-bank-gold transition-colors font-bold uppercase tracking-widest"
+                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-surface-600 hover:text-brand-600 transition-colors bg-white border border-surface-200 rounded-md shadow-sm"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
+                <RefreshCcw className="w-3.5 h-3.5" />
                 {t.reset}
               </button>
             )}
@@ -138,28 +141,30 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {!dataset || !chartDataset ? (
-          <div className="space-y-12 flex flex-col items-center justify-center min-h-[70vh]">
-            <div className="text-center max-w-2xl space-y-4">
-              <Award className="w-12 h-12 text-bank-gold mx-auto mb-2 opacity-50" />
-              <h2 className="text-4xl font-serif font-bold text-bank-navy">{t.ingestion}</h2>
-              <p className="text-slate-500 font-light text-lg">
+          <div className="space-y-10 flex flex-col items-center justify-center min-h-[60vh] py-12">
+            <div className="text-center max-w-xl space-y-4">
+              <div className="w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-brand-100">
+                <Globe className="w-8 h-8 text-brand-600" />
+              </div>
+              <h2 className="text-3xl font-extrabold tracking-tight text-surface-900">{t.ingestion}</h2>
+              <p className="text-surface-500 font-medium leading-relaxed">
                 {t.ingestionSub}
               </p>
             </div>
 
-            <div className="flex bg-white p-1 rounded-sm border border-bank-gold/30 shadow-sm">
+            <div className="flex bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm">
                 <button 
                     onClick={() => setInputMode('upload')}
-                    className={`flex items-center gap-3 px-8 py-3 rounded-sm text-xs font-bold uppercase tracking-widest transition-all ${inputMode === 'upload' ? 'bg-bank-navy text-white shadow-lg' : 'text-slate-500 hover:bg-slate-50'}`}
+                    className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === 'upload' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
                 >
                     <FileUp className="w-4 h-4" />
                     {t.upload}
                 </button>
                 <button 
                     onClick={() => setInputMode('restructure')}
-                    className={`flex items-center gap-3 px-8 py-3 rounded-sm text-xs font-bold uppercase tracking-widest transition-all ${inputMode === 'restructure' ? 'bg-bank-navy text-white shadow-lg' : 'text-slate-500 hover:bg-slate-50'}`}
+                    className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === 'restructure' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
                 >
                     <Database className="w-4 h-4" />
                     {t.builder}
@@ -168,37 +173,40 @@ const App: React.FC = () => {
 
             <div className="w-full max-w-4xl">
               {inputMode === 'upload' ? (
-                  <FileUpload onDataLoaded={handleDataLoaded} lang={lang} />
+                  <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
+                    <FileUpload onDataLoaded={handleDataLoaded} lang={lang} />
+                  </div>
               ) : (
-                  <DataRestructurer onComplete={handleRestructureComplete} lang={lang} />
+                  <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
+                    <DataRestructurer onComplete={handleRestructureComplete} lang={lang} />
+                  </div>
               )}
             </div>
 
             {error && (
-              <div className="p-4 bg-red-50 text-red-900 border border-red-200 font-medium text-sm flex items-center gap-3">
+              <div className="px-4 py-3 bg-red-50 text-red-700 border border-red-100 rounded-xl text-sm font-semibold flex items-center gap-3 animate-in fade-in zoom-in">
                 <ShieldCheck className="w-5 h-5 text-red-500" />
                 {error}
               </div>
             )}
           </div>
         ) : (
-          <div className="max-w-6xl mx-auto space-y-10 animate-in fade-in duration-700">
-            <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                   <div className="h-1 w-8 bg-bank-gold"></div>
-                   <span className="text-[10px] font-black text-bank-gold uppercase tracking-[0.3em]">{t.review}</span>
+          <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                   <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-2 py-0.5 rounded border border-brand-100">{t.review}</span>
                 </div>
-                <h2 className="text-4xl font-serif font-bold text-bank-navy">{t.perfTitle}</h2>
+                <h2 className="text-3xl font-extrabold tracking-tight text-surface-900">{t.perfTitle}</h2>
               </div>
               
-              <div className="bg-white p-1.5 rounded-sm border border-bank-gold/20 shadow-sm flex">
+              <div className="bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm flex items-center">
                 <button
                   onClick={() => setViewMode('normalized')}
-                  className={`flex items-center gap-2 px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-sm transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
                     viewMode === 'normalized' 
-                      ? 'bg-bank-navy text-white' 
-                      : 'text-slate-400 hover:text-slate-600'
+                      ? 'bg-white text-brand-700 shadow-md border border-surface-200' 
+                      : 'text-surface-500 hover:text-surface-700'
                   }`}
                 >
                   <TrendingUp className="w-3.5 h-3.5" />
@@ -206,10 +214,10 @@ const App: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setViewMode('raw')}
-                  className={`flex items-center gap-2 px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-sm transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
                     viewMode === 'raw' 
-                      ? 'bg-bank-navy text-white' 
-                      : 'text-slate-400 hover:text-slate-600'
+                      ? 'bg-white text-brand-700 shadow-md border border-surface-200' 
+                      : 'text-surface-500 hover:text-surface-700'
                   }`}
                 >
                   <DollarSign className="w-3.5 h-3.5" />
@@ -218,51 +226,67 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            <div className="glass-card p-8 rounded-sm shadow-xl">
+            <div className="bg-white p-8 rounded-3xl border border-surface-200 shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-[0.03]">
+                <Activity className="w-32 h-32 text-brand-600" />
+              </div>
               <FundChart dataset={chartDataset} viewMode={viewMode} lang={lang} />
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               <div className="bg-white p-6 border-l-4 border-bank-gold shadow-sm hover:shadow-md transition-shadow">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-4">{t.records}</span>
-                  <p className="text-3xl font-serif font-bold text-bank-navy">{dataset.data.length.toLocaleString()}</p>
-               </div>
-               <div className="bg-white p-6 border-l-4 border-bank-gold shadow-sm hover:shadow-md transition-shadow">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-4">{t.assets}</span>
-                  <p className="text-3xl font-serif font-bold text-bank-navy">{dataset.funds.length}</p>
-               </div>
-               <div className="bg-white p-6 border-l-4 border-bank-gold shadow-sm hover:shadow-md transition-shadow">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-4">{t.window}</span>
+               <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                  <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.records}</span>
                   <div className="flex items-end justify-between">
-                    <p className="text-sm font-bold text-bank-navy leading-tight uppercase tracking-tighter">
-                      {dataset.data[0]?.date}<br/>
-                      <span className="text-bank-gold">{t.to}</span><br/>
-                      {dataset.data[dataset.data.length - 1]?.date}
+                    <p className="text-3xl font-extrabold text-surface-900">{dataset.data.length.toLocaleString()}</p>
+                    <LineChart className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                  </div>
+               </div>
+               <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                  <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.assets}</span>
+                  <div className="flex items-end justify-between">
+                    <p className="text-3xl font-extrabold text-surface-900">{dataset.funds.length}</p>
+                    <Database className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                  </div>
+               </div>
+               <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                  <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.window}</span>
+                  <div className="flex items-end justify-between">
+                    <p className="text-sm font-bold text-surface-900 leading-tight">
+                      <span className="text-brand-600 tabular-nums">{dataset.data[0]?.date}</span>
+                      <span className="block text-[10px] text-surface-400 my-0.5 uppercase tracking-tighter">{t.to}</span>
+                      <span className="text-brand-600 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
                     </p>
-                    <Database className="w-8 h-8 text-bank-gold opacity-30" />
+                    <Settings className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
                   </div>
                </div>
             </div>
 
-            <div className="bg-white border border-bank-gold/10 overflow-hidden shadow-2xl rounded-sm">
-              <div className="px-6 py-4 bg-bank-navy border-b border-bank-gold/20 flex items-center justify-between">
-                <h3 className="text-xs font-black text-white uppercase tracking-[0.2em]">{t.registry}</h3>
-                <BarChart3 className="w-4 h-4 text-bank-gold" />
+            <div className="bg-white border border-surface-200 overflow-hidden shadow-lg rounded-3xl">
+              <div className="px-6 py-5 bg-surface-50 border-b border-surface-200 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></div>
+                  <h3 className="text-sm font-bold text-surface-900 uppercase tracking-widest">{t.registry}</h3>
+                </div>
+                <BarChart3 className="w-4 h-4 text-surface-400" />
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <thead className="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest border-b border-slate-100">
+                  <thead className="bg-surface-50/50 text-[10px] font-bold uppercase text-surface-400 tracking-widest border-b border-surface-100">
                     <tr>
-                      <th className="px-6 py-4">{lang === 'cn' ? '估值日期' : 'Valuation Date'}</th>
-                      {dataset.funds.map(f => <th key={f} className="px-6 py-4">{f}</th>)}
+                      <th className="px-6 py-4">{lang === 'cn' ? '估值日期' : 'Date'}</th>
+                      {dataset.funds.map(f => (
+                        <th key={f} className="px-6 py-4">
+                          <span className="text-surface-900">{f}</span>
+                        </th>
+                      ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 font-mono text-xs">
-                    {dataset.data.slice(0, 10).map((row, i) => (
-                      <tr key={i} className="hover:bg-bank-cream transition-colors">
-                        <td className="px-6 py-4 font-bold text-bank-navy">{row.date}</td>
+                  <tbody className="divide-y divide-surface-100 font-mono text-xs">
+                    {dataset.data.slice(0, 15).map((row, i) => (
+                      <tr key={i} className="hover:bg-brand-50/30 transition-colors group">
+                        <td className="px-6 py-4 font-bold text-surface-900">{row.date}</td>
                         {dataset.funds.map(f => (
-                          <td key={f} className="px-6 py-4 text-slate-600">
+                          <td key={f} className="px-6 py-4 text-surface-600 tabular-nums group-hover:text-brand-700">
                               {row[f] !== null && row[f] !== undefined ? (row[f] as number).toLocaleString(undefined, {minimumFractionDigits: 2}) : '-'}
                           </td>
                         ))}
@@ -271,15 +295,22 @@ const App: React.FC = () => {
                   </tbody>
                 </table>
               </div>
+              {dataset.data.length > 15 && (
+                <div className="px-6 py-4 bg-surface-50 text-[10px] text-surface-400 font-medium text-center border-t border-surface-100 italic">
+                  Truncated showing top 15 records out of {dataset.data.length}
+                </div>
+              )}
             </div>
           </div>
         )}
       </main>
       
-      <footer className="py-20 text-center border-t border-bank-gold/10 mt-20">
-        <Compass className="w-8 h-8 text-bank-gold mx-auto mb-6 opacity-40" />
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-bank-navy opacity-60">
-          {lang === 'cn' ? '基金圖表構建器 — 私人' : 'Fund Chart Builder — Confidential'}
+      <footer className="py-16 text-center border-t border-surface-200 mt-20 bg-white">
+        <div className="bg-brand-50 w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-4 border border-brand-100">
+          <Zap className="w-5 h-5 text-brand-600" />
+        </div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-surface-400">
+          {lang === 'cn' ? '基金圖表構建器 — 企業版' : 'Fund Chart Builder — Enterprise Edition'}
         </p>
       </footer>
     </div>
