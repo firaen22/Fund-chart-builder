@@ -8,13 +8,44 @@ This contains everything you need to run your app locally.
 
 View your app in AI Studio: https://ai.studio/apps/drive/15hffPWfCixBvYVrrOBn0S_eAkAIutmfE
 
-## Run Locally
+## Fund Chart Builder
 
-**Prerequisites:**  Node.js
+A React application for building fund charts.
 
+## Setup & Installation
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+2.  **Start development server:**
+    ```bash
+    npm run dev
+    ```
+
+3.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+
+## Deployment
+
+### Automated Deployment (Recommended)
+This repository is configured with GitHub Actions.
+1.  Push changes to the `main` branch.
+2.  The workflow will automatically build and deploy to GitHub Pages.
+3.  Ensure your repository settings -> Pages -> Build and deployment -> Source is set to **GitHub Actions**.
+
+### Manual Deployment
+You can also deploy manually from your local machine:
+```bash
+npm run deploy
+```
+This will build the project and push the `dist` folder to the `gh-pages` branch.
+*Note: For manual deployment to work, ensure your repository settings -> Pages -> Build and deployment -> Source is set to **Deploy from a branch** and select `gh-pages` / `/ (root)`.*
+
+## Configuration
+
+- **.gitignore**: Configured to ignore logs, dependencies, and build outputs.
+- **Vite**: Configured with `@` alias for src.
