@@ -5,6 +5,9 @@ import { DataRestructurer } from './components/DataRestructurer';
 import { parseCSV, normalizeDataset } from './utils/csvParser';
 import { FundDataset, Language } from './types';
 import { FinancialMetrics } from './components/FinancialMetrics';
+import { ChatInterface } from './components/ChatInterface';
+import { ApiKeyModal } from './components/ApiKeyModal';
+import { analyzeFundData } from './services/gemini';
 import {
   LineChart,
   BarChart3,
@@ -26,6 +29,12 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'raw' | 'normalized'>('normalized');
   const [inputMode, setInputMode] = useState<'upload' | 'restructure'>('upload');
+
+  // AI & API Key State
+  const [apiKey, setApiKey] = useState<string>(() => localStorage.getItem('gemini_api_key') || '');
+  const [showKeyModal, setShowKeyModal] = useState(false);
+  const [analysis, setAnalysis] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const t = {
     en: {
@@ -68,6 +77,32 @@ const App: React.FC = () => {
     }
   }[lang];
 
+  const handleRunAnalysis = async () => {
+    if (!apiKey) {
+      setShowKeyModal(true);
+      return;
+    }
+
+    if (!dataset) return;
+
+    setIsAnalyzing(true);
+    setAnalysis(null);
+    try {
+      const result = await analyzeFundData(dataset, apiKey, lang);
+      setAnalysis(result);
+    } catch (err) {
+      setAnalysis("Error generating analysis. Please check your API Key and try again.");
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const handleSaveKey = (key: string) => {
+    localStorage.setItem('gemini_api_key', key);
+    setApiKey(key);
+    setShowKeyModal(false);
+  };
+
   const handleDataLoaded = async (content: string) => {
     setError(null);
     try {
@@ -96,7 +131,7 @@ const App: React.FC = () => {
   }, [dataset, viewMode]);
 
   return (
-    <div className="min-h-screen bg-surface-50 text-surface-900 selection:bg-brand-100 selection:text-brand-900">
+    <div className="min-h-screen bg-surface-50 text-surface-900 selection:bg-brand-100 selection:text-brand-900" >
       <header className="sticky top-0 z-50 glass-effect border-b border-surface-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -138,9 +173,24 @@ const App: React.FC = () => {
                 {t.reset}
               </button>
             )}
+
+            <button
+              onClick={() => setShowKeyModal(true)}
+              className="p-2 text-surface-500 hover:text-surface-900 transition-colors rounded-md hover:bg-surface-100"
+              title="API Settings"
+            >
+              <Settings className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </header>
+
+      <ApiKeyModal
+        isOpen={showKeyModal}
+        onClose={() => setShowKeyModal(false)}
+        onSave={handleSaveKey}
+        lang={lang}
+      />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {!dataset || !chartDataset ? (
@@ -264,6 +314,18 @@ const App: React.FC = () => {
               <FinancialMetrics dataset={chartDataset} lang={lang} />
             </div>
 
+            <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-100">
+              <ChatInterface
+                analysis={analysis}
+                isAnalyzing={isAnalyzing}
+                onRunAnalysis={handleRunAnalysis}
+                hasData={!!dataset}
+                lang={lang}
+              />
+            </div>
+
+
+
             <div className="bg-white border border-surface-200 overflow-hidden shadow-lg rounded-3xl">
               <div className="px-6 py-5 bg-surface-50 border-b border-surface-200 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -316,7 +378,7 @@ const App: React.FC = () => {
           {lang === 'cn' ? '基金圖表構建器 — 企業版' : 'Fund Chart Builder — Enterprise Edition'}
         </p>
       </footer>
-    </div>
+    </div >
   );
 };
 

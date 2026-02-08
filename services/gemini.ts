@@ -2,8 +2,8 @@
 import { GoogleGenAI } from "@google/genai";
 import { FundDataset, Language } from "../types";
 
-export const analyzeFundData = async (dataset: FundDataset, lang: Language = 'en'): Promise<string> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+export const analyzeFundData = async (dataset: FundDataset, apiKey: string, lang: Language = 'en'): Promise<string> => {
+  const ai = new GoogleGenAI({ apiKey });
   const modelName = 'gemini-3-flash-preview';
 
   const recentData = dataset.data.slice(-25);
@@ -12,8 +12,8 @@ export const analyzeFundData = async (dataset: FundDataset, lang: Language = 'en
     return `${d.date} | ${fundValues}`;
   }).join('\n');
 
-  const langInstruction = lang === 'cn' 
-    ? "请用中文提供分析报告。" 
+  const langInstruction = lang === 'cn'
+    ? "请用中文提供分析报告。"
     : "Please provide the analysis in English.";
 
   const prompt = `As a professional investment analyst, please analyze the following mutual fund NAV performance history (rebased to 100 for easy comparison).
