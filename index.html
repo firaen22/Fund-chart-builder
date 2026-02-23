@@ -1,141 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fund Chart Builder | Institutional Analytics</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            brand: {
-              50: '#f0f4ff',
-              100: '#e0eaff',
-              200: '#c7d8ff',
-              300: '#a3c0ff',
-              400: '#7fa0ff',
-              500: '#5c7aff',
-              600: '#3d52f5',
-              700: '#2b39d9',
-              800: '#212eb3',
-              900: '#1e2a8f',
-              950: '#141a54',
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fund Chart Builder | Institutional Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
             },
-            surface: {
-              50: '#f4f6fa',
-              100: '#e7ebf2',
-              200: '#d1d8e5',
-              300: '#b8c3d6',
-              400: '#9faec4',
-              500: '#8797b0',
-              600: '#697894',
-              700: '#526078',
-              800: '#434e63',
-              900: '#394254',
-              950: '#262d3b',
+            colors: {
+              brand: {
+                50: '#f5f7ff',
+                100: '#ebf0fe',
+                200: '#dae3fe',
+                300: '#b8c9fd',
+                400: '#8fa8fa',
+                500: '#637df7',
+                600: '#4a57f2',
+                700: '#3c42e0',
+                800: '#3237b6',
+                900: '#2d3191',
+                950: '#1e2056',
+              },
+              surface: {
+                50: '#fafafa',
+                100: '#f4f4f5',
+                200: '#e4e4e7',
+                300: '#d4d4d8',
+                400: '#a1a1aa',
+                500: '#71717a',
+                900: '#18181b',
+              }
             }
           }
         }
       }
-    }
-  </script>
-  <style>
-    body {
-      /* Deep glossy navy gradient inspired by the middle widget */
-      background: linear-gradient(135deg, #1b3365 0%, #0d1e44 40%, #050a1b 100%);
-      background-attachment: fixed;
-      color: #f1f5f9;
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-    }
-
-    .glass-effect {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    }
-
-    .glass-panel {
-      background: rgba(10, 20, 45, 0.4);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.4);
-    }
-
-    .card-shadow {
-      box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.4);
-    }
-
-    .hover-lift {
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .hover-lift:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.5);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Base overrides to handle existing classes seamlessly */
-    .bg-white {
-      background: rgba(255, 255, 255, 0.06) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      color: #f8fafc;
-    }
-
-    .text-surface-900 {
-      color: #f8fafc !important;
-    }
-
-    .text-surface-600 {
-      color: #e2e8f0 !important;
-    }
-
-    .text-surface-500 {
-      color: #cbd5e1 !important;
-    }
-
-    .text-surface-400 {
-      color: #94a3b8 !important;
-    }
-
-    .border-surface-200,
-    .border-surface-100 {
-      border-color: rgba(255, 255, 255, 0.08) !important;
-    }
-
-    .bg-surface-50,
-    .bg-surface-100 {
-      background: rgba(255, 255, 255, 0.03) !important;
-      color: #f8fafc !important;
-    }
-
-    .hover\:bg-surface-100:hover {
-      background: rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .shadow-sm,
-    .shadow-md,
-    .shadow-lg,
-    .shadow-xl {
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
-    }
-  </style>
+    </script>
+    <style>
+      body {
+        background-color: #fafafa;
+        color: #18181b;
+        -webkit-font-smoothing: antialiased;
+      }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(228, 228, 231, 0.5);
+      }
+      .card-shadow {
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      }
+      .hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      }
+    </style>
 
   <script type="importmap">
 {
@@ -152,9 +81,7 @@
 </script>
   <script type="module" crossorigin src="/assets/index-DczWK1tz.js"></script>
 </head>
-
-<body>
-  <div id="root"></div>
-</body>
-
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
