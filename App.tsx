@@ -1,16 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { FileUpload } from './components/FileUpload';
-import { FundChart } from './components/FundChart';
-import { DataRestructurer } from './components/DataRestructurer';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
 import { parseCSV, normalizeDataset } from './utils/csvParser';
 import { FundDataset, Language } from './types';
-import { FinancialMetrics } from './components/FinancialMetrics';
-import { ChatInterface } from './components/ChatInterface';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { analyzeFundData } from './services/gemini';
 import {
   LineChart,
-  BarChart3,
   RefreshCcw,
   DollarSign,
   Database,
@@ -22,6 +16,13 @@ import {
   Settings,
   ShieldCheck
 } from 'lucide-react';
+
+const FileUpload = lazy(() => import('./components/FileUpload').then(m => ({ default: m.FileUpload })));
+const FundChart = lazy(() => import('./components/FundChart').then(m => ({ default: m.FundChart })));
+const DataRestructurer = lazy(() => import('./components/DataRestructurer').then(m => ({ default: m.DataRestructurer })));
+const FinancialMetrics = lazy(() => import('./components/FinancialMetrics').then(m => ({ default: m.FinancialMetrics })));
+const ChatInterface = lazy(() => import('./components/ChatInterface').then(m => ({ default: m.ChatInterface })));
+const HistoricalRegistry = lazy(() => import('./components/HistoricalRegistry').then(m => ({ default: m.HistoricalRegistry })));
 
 const App: React.FC = () => {
   const [lang, setLang] = useState<Language>('en');
@@ -223,15 +224,21 @@ const App: React.FC = () => {
             </div>
 
             <div className="w-full max-w-4xl">
-              {inputMode === 'upload' ? (
-                <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
-                  <FileUpload onDataLoaded={handleDataLoaded} lang={lang} />
+              <Suspense fallback={
+                <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-8 flex items-center justify-center min-h-[300px]">
+                  <div className="w-8 h-8 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
                 </div>
-              ) : (
-                <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
-                  <DataRestructurer onComplete={handleRestructureComplete} lang={lang} />
-                </div>
-              )}
+              }>
+                {inputMode === 'upload' ? (
+                  <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
+                    <FileUpload onDataLoaded={handleDataLoaded} lang={lang} />
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
+                    <DataRestructurer onComplete={handleRestructureComplete} lang={lang} />
+                  </div>
+                )}
+              </Suspense>
             </div>
 
             {error && (
@@ -279,7 +286,9 @@ const App: React.FC = () => {
               <div className="absolute top-0 right-0 p-4 opacity-[0.03]">
                 <Activity className="w-32 h-32 text-brand-600" />
               </div>
-              <FundChart dataset={chartDataset} viewMode={viewMode} lang={lang} />
+              <Suspense fallback={<div className="h-[500px] w-full animate-pulse bg-surface-50 rounded-xl"></div>}>
+                <FundChart dataset={chartDataset} viewMode={viewMode} lang={lang} />
+              </Suspense>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -311,60 +320,27 @@ const App: React.FC = () => {
             </div>
 
             <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
-              <FinancialMetrics dataset={chartDataset} lang={lang} />
+              <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                <FinancialMetrics dataset={chartDataset} lang={lang} />
+              </Suspense>
             </div>
 
             <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-100">
-              <ChatInterface
-                analysis={analysis}
-                isAnalyzing={isAnalyzing}
-                onRunAnalysis={handleRunAnalysis}
-                hasData={!!dataset}
-                lang={lang}
-              />
+              <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                <ChatInterface
+                  analysis={analysis}
+                  isAnalyzing={isAnalyzing}
+                  onRunAnalysis={handleRunAnalysis}
+                  hasData={!!dataset}
+                  lang={lang}
+                />
+              </Suspense>
             </div>
 
-
-
-            <div className="bg-white border border-surface-200 overflow-hidden shadow-lg rounded-3xl">
-              <div className="px-6 py-5 bg-surface-50 border-b border-surface-200 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></div>
-                  <h3 className="text-sm font-bold text-surface-900 uppercase tracking-widest">{t.registry}</h3>
-                </div>
-                <BarChart3 className="w-4 h-4 text-surface-400" />
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead className="bg-surface-50/50 text-[10px] font-bold uppercase text-surface-400 tracking-widest border-b border-surface-100">
-                    <tr>
-                      <th className="px-6 py-4">{lang === 'cn' ? '估值日期' : 'Date'}</th>
-                      {dataset.funds.map(f => (
-                        <th key={f} className="px-6 py-4">
-                          <span className="text-surface-900">{f}</span>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-surface-100 font-mono text-xs">
-                    {dataset.data.slice(0, 15).map((row, i) => (
-                      <tr key={i} className="hover:bg-brand-50/30 transition-colors group">
-                        <td className="px-6 py-4 font-bold text-surface-900">{row.date}</td>
-                        {dataset.funds.map(f => (
-                          <td key={f} className="px-6 py-4 text-surface-600 tabular-nums group-hover:text-brand-700">
-                            {row[f] !== null && row[f] !== undefined ? (row[f] as number).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              {dataset.data.length > 15 && (
-                <div className="px-6 py-4 bg-surface-50 text-[10px] text-surface-400 font-medium text-center border-t border-surface-100 italic">
-                  Truncated showing top 15 records out of {dataset.data.length}
-                </div>
-              )}
+            <div className="animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-200">
+              <Suspense fallback={<div className="h-[400px] border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                <HistoricalRegistry dataset={dataset} lang={lang} />
+              </Suspense>
             </div>
           </div>
         )}
