@@ -10,7 +10,9 @@ import {
     Activity,
     AlertTriangle,
     Percent,
-    BarChart2
+    BarChart2,
+    Shield,
+    Target
 } from 'lucide-react';
 
 interface Props {
@@ -36,7 +38,10 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
         maxDrawdown: true,
         cumulativeReturn: true,
         volatility: false,
-        rsi: false
+        rsi: false,
+        sortinoRatio: true,
+        beta: false,
+        alpha: false
     });
 
     const t = {
@@ -47,12 +52,18 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
             metrics: "Select Indicators",
             sharpe: "Sharpe Ratio",
             sharpeDesc: "Risk-adjusted return",
+            sortino: "Sortino Ratio",
+            sortinoDesc: "Downside risk-adjusted return",
             mdd: "Max Drawdown",
             mddDesc: "Worst possible loss",
             return: "Cumulative Return",
             returnDesc: "Total profit/loss",
             volatility: "Ann. Volatility",
             volatilityDesc: "Price stability",
+            beta: "Beta",
+            betaDesc: "Market volatility vs benchmark",
+            alpha: "Alpha",
+            alphaDesc: "Excess return vs benchmark",
             rsi: "RSI (14)",
             rsiDesc: "Momentum indicator",
             fund: "Fund Name",
@@ -65,12 +76,18 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
             metrics: "選擇指標",
             sharpe: "夏普比率",
             sharpeDesc: "每一單位風險的超額回報",
+            sortino: "索提諾比率",
+            sortinoDesc: "下行風險調整後回報",
             mdd: "最大回撤",
             mddDesc: "期間內最大跌幅",
             return: "累積回報",
             returnDesc: "期間總獲利",
             volatility: "年化波動率",
             volatilityDesc: "價格變動劇烈程度",
+            beta: "貝塔係數 (Beta)",
+            betaDesc: "相對於基準的波動性",
+            alpha: "阿爾法 (Alpha)",
+            alphaDesc: "相對於基準的超額回報",
             rsi: "相對強弱指數 (RSI)",
             rsiDesc: "趨勢與買賣力道",
             fund: "基金名稱",
@@ -82,14 +99,18 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
         { key: 'cumulativeReturn', label: t.return, desc: t.returnDesc, icon: Percent, color: 'text-emerald-600' },
         { key: 'maxDrawdown', label: t.mdd, desc: t.mddDesc, icon: AlertTriangle, color: 'text-red-500' },
         { key: 'sharpeRatio', label: t.sharpe, desc: t.sharpeDesc, icon: Activity, color: 'text-indigo-600' },
+        { key: 'sortinoRatio', label: t.sortino, desc: t.sortinoDesc, icon: Shield, color: 'text-sky-500' },
         { key: 'volatility', label: t.volatility, desc: t.volatilityDesc, icon: Activity, color: 'text-orange-500' },
+        { key: 'beta', label: t.beta, desc: t.betaDesc, icon: TrendingUp, color: 'text-rose-500' },
+        { key: 'alpha', label: t.alpha, desc: t.alphaDesc, icon: Target, color: 'text-amber-500' },
         { key: 'rsi', label: t.rsi, desc: t.rsiDesc, icon: BarChart2, color: 'text-purple-600' },
     ];
 
     const computedMetrics = useMemo(() => {
         const results: Record<string, MetricResults | null> = {};
+        const benchmarkName = dataset.funds.length > 0 ? dataset.funds[0] : undefined;
         dataset.funds.forEach(fund => {
-            results[fund] = calculateAllMetrics(dataset.data, fund, startDate, endDate);
+            results[fund] = calculateAllMetrics(dataset.data, fund, startDate, endDate, benchmarkName);
         });
         return results;
     }, [dataset, startDate, endDate]);
@@ -190,16 +211,16 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
                                             let colorClass = 'text-surface-600';
 
                                             if (value !== undefined && value !== null && !isNaN(value)) {
-                                                if (m.key === 'cumulativeReturn' || m.key === 'maxDrawdown' || m.key === 'volatility') {
+                                                if (m.key === 'cumulativeReturn' || m.key === 'maxDrawdown' || m.key === 'volatility' || m.key === 'alpha') {
                                                     displayValue = (value * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
-                                                    if (m.key === 'cumulativeReturn') {
+                                                    if (m.key === 'cumulativeReturn' || m.key === 'alpha') {
                                                         colorClass = value >= 0 ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold';
                                                     } else if (m.key === 'maxDrawdown') {
                                                         colorClass = 'text-red-500 font-bold';
                                                     }
                                                 } else {
                                                     displayValue = value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                                                    if (m.key === 'sharpeRatio') {
+                                                    if (m.key === 'sharpeRatio' || m.key === 'sortinoRatio') {
                                                         colorClass = value > 1 ? 'text-emerald-600 font-bold' : (value < 0 ? 'text-red-500' : 'text-surface-700');
                                                     }
                                                 }

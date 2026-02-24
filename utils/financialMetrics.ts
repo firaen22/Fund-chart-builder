@@ -96,19 +96,94 @@ export const calculateRSI = (prices: number[], period: number = 14): number => {
     return 100 - (100 / (1 + rs));
 };
 
+export const calculateSortinoRatio = (prices: number[], riskFreeRate: number = 0): number => {
+    if (prices.length < 2) return 0;
+
+    const returns: number[] = [];
+    for (let i = 1; i < prices.length; i++) {
+        returns.push((prices[i] - prices[i - 1]) / prices[i - 1]);
+    }
+
+    const meanDailyReturn = returns.reduce((a, b) => a + b, 0) / returns.length;
+
+    const downsideReturns = returns.map(r => r < 0 ? r : 0);
+    const downsideVariance = downsideReturns.reduce((a, b) => a + Math.pow(b, 2), 0) / returns.length;
+
+    if (downsideVariance === 0) return 0; // handle zero downside variance edge case
+
+    const downsideDeviation = Math.sqrt(downsideVariance);
+
+    // Annualize
+    const annualizedReturn = Math.pow(1 + meanDailyReturn, 252) - 1;
+    const annualizedDownsideDev = downsideDeviation * Math.sqrt(252);
+
+    return (annualizedReturn - riskFreeRate) / annualizedDownsideDev;
+};
+
+export const calculateBeta = (fundPrices: number[], benchmarkPrices: number[]): number | undefined => {
+    if (fundPrices.length < 2 || benchmarkPrices.length < 2 || fundPrices.length !== benchmarkPrices.length) return undefined;
+
+    const fundReturns: number[] = [];
+    const benchReturns: number[] = [];
+    for (let i = 1; i < fundPrices.length; i++) {
+        fundReturns.push((fundPrices[i] - fundPrices[i - 1]) / fundPrices[i - 1]);
+        benchReturns.push((benchmarkPrices[i] - benchmarkPrices[i - 1]) / benchmarkPrices[i - 1]);
+    }
+
+    const fundMean = fundReturns.reduce((a, b) => a + b, 0) / fundReturns.length;
+    const benchMean = benchReturns.reduce((a, b) => a + b, 0) / benchReturns.length;
+
+    let covariance = 0;
+    let benchVariance = 0;
+
+    for (let i = 0; i < fundReturns.length; i++) {
+        covariance += (fundReturns[i] - fundMean) * (benchReturns[i] - benchMean);
+        benchVariance += Math.pow(benchReturns[i] - benchMean, 2);
+    }
+
+    covariance /= fundReturns.length;
+    benchVariance /= benchReturns.length;
+
+    if (benchVariance === 0) return undefined;
+
+    return covariance / benchVariance;
+};
+
+export const calculateAlpha = (fundPrices: number[], benchmarkPrices: number[], beta: number, riskFreeRate: number = 0): number | undefined => {
+    if (fundPrices.length < 2 || benchmarkPrices.length < 2 || fundPrices.length !== benchmarkPrices.length) return undefined;
+
+    const calcAnnualized = (prices: number[]) => {
+        const returns: number[] = [];
+        for (let i = 1; i < prices.length; i++) {
+            returns.push((prices[i] - prices[i - 1]) / prices[i - 1]);
+        }
+        const meanDaily = returns.reduce((a, b) => a + b, 0) / returns.length;
+        return Math.pow(1 + meanDaily, 252) - 1;
+    };
+
+    const fundAnn = calcAnnualized(fundPrices);
+    const benchAnn = calcAnnualized(benchmarkPrices);
+
+    return (fundAnn - riskFreeRate) - beta * (benchAnn - riskFreeRate);
+};
+
 export interface MetricResults {
     cumulativeReturn: number;
     maxDrawdown: number;
     volatility: number;
     sharpeRatio: number;
+    sortinoRatio: number;
     rsi: number;
+    beta?: number;
+    alpha?: number;
 }
 
 export const calculateAllMetrics = (
     data: DataPoint[],
     fundName: string,
     startDate?: string,
-    endDate?: string
+    endDate?: string,
+    benchmarkName?: string
 ): MetricResults | null => {
     // 1. Filter by date
     let filteredData = data;
@@ -123,11 +198,30 @@ export const calculateAllMetrics = (
 
     if (prices.length === 0) return null;
 
+    let beta: number | undefined = undefined;
+    let alpha: number | undefined = undefined;
+
+    if (benchmarkName && benchmarkName !== fundName) {
+        const benchPrices = filteredData
+            .map(d => d[benchmarkName])
+            .filter((val): val is number => typeof val === 'number');
+
+        if (benchPrices.length === prices.length) {
+            beta = calculateBeta(prices, benchPrices);
+            if (beta !== undefined) {
+                alpha = calculateAlpha(prices, benchPrices, beta);
+            }
+        }
+    }
+
     return {
         cumulativeReturn: calculateCumulativeReturn(prices),
         maxDrawdown: calculateDrawdown(prices),
         volatility: calculateVolatility(prices),
         sharpeRatio: calculateSharpeRatio(prices),
-        rsi: calculateRSI(prices)
+        sortinoRatio: calculateSortinoRatio(prices),
+        rsi: calculateRSI(prices),
+        beta,
+        alpha
     };
 };
