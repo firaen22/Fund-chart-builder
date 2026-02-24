@@ -141,13 +141,13 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
                         <button
                             key={metric.key}
                             onClick={() => toggleMetric(metric.key)}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all ${selectedMetrics[metric.key]
-                                    ? 'bg-brand-50 border-brand-200 shadow-sm'
-                                    : 'bg-white border-surface-200 hover:bg-surface-50 text-surface-400'
+                            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 ease-out active:scale-95 ${selectedMetrics[metric.key]
+                                ? 'bg-brand-50 border-brand-200 shadow-sm'
+                                : 'bg-white border-surface-200 hover:bg-surface-50 text-surface-400'
                                 }`}
                         >
                             <div className={`w-4 h-4 rounded-full flex items-center justify-center ${selectedMetrics[metric.key] ? 'bg-brand-500 text-white' : 'bg-surface-200'}`}>
-                                {selectedMetrics[metric.key] && <CheckCircle2 className="w-3 h-3" />}
+                                {selectedMetrics[metric.key] && <CheckCircle2 className="w-3 h-3 animate-in zoom-in duration-300 ease-out" />}
                             </div>
                             <div className="text-left">
                                 <span className={`block text-[10px] font-bold uppercase tracking-wider ${selectedMetrics[metric.key] ? 'text-brand-900' : 'text-surface-500'}`}>

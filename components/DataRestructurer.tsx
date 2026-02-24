@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  Trash2, LayoutGrid, Info, Hash, 
+import {
+  Trash2, LayoutGrid, Info, Hash,
   ClipboardPaste, Database, CheckCircle2, History, Wand2,
   ShieldCheck, ArrowRight, Bookmark,
   Layers, FileText, PlusCircle, Calendar
 } from 'lucide-react';
-import { 
-  RawFundEntry, mergeFundEntries, parseRawPastedData, 
-  reconcileDataset 
+import {
+  RawFundEntry, mergeFundEntries, parseRawPastedData,
+  reconcileDataset
 } from '../utils/dataMerger';
 import { FundDataset, Language } from '../types';
 
@@ -95,15 +95,15 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
   };
 
   const handleCommit = () => {
-    if(currentCode && currentText) { 
+    if (currentCode && currentText) {
       setEntries(p => [...p, {
-        code: currentCode, 
+        code: currentCode,
         description: currentDescription || currentCode,
         rawText: currentText
-      }]); 
-      setCurrentCode(''); 
+      }]);
+      setCurrentCode('');
       setCurrentDescription('');
-      setCurrentText(''); 
+      setCurrentText('');
     }
   };
 
@@ -133,7 +133,7 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
             </div>
             <div className="flex gap-3">
               <button onClick={() => setStep('input')} className="px-5 py-2.5 bg-surface-800 hover:bg-surface-700 text-white rounded-xl text-xs font-bold transition-all border border-surface-700">{t.back}</button>
-              <button onClick={() => onComplete(finalDatasetPreview)} className="px-8 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2">
+              <button onClick={() => onComplete(finalDatasetPreview)} className="px-8 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-lg transition-all duration-300 ease-out active:scale-[0.98] flex items-center gap-2 bg-gradient-to-r from-brand-500 via-brand-400 to-brand-500 animate-shimmer hover:shadow-brand-500/25">
                 {t.launch} <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -148,9 +148,9 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
             </div>
             <div className="space-y-3">
               {t.strategies.map(s => (
-                <button 
-                  key={s.id} 
-                  onClick={() => setAlignmentStrategy(s.id as any)} 
+                <button
+                  key={s.id}
+                  onClick={() => setAlignmentStrategy(s.id as any)}
                   className={`w-full text-left p-5 rounded-2xl border transition-all ${alignmentStrategy === s.id ? 'border-brand-500 bg-white shadow-md ring-1 ring-brand-500' : 'border-surface-200 opacity-60 hover:opacity-100 hover:bg-white'}`}
                 >
                   <p className="text-xs font-extrabold text-surface-900 uppercase tracking-tight mb-1">{s.label}</p>
@@ -182,7 +182,7 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
                     {finalDatasetPreview.funds.map(f => (
                       <td key={f} className={`p-5 tabular-nums ${row[`_synthetic_${f}`] ? 'text-brand-600 font-extrabold' : 'text-surface-600 font-medium'}`}>
                         <div className="flex items-center justify-between">
-                          {row[f] !== null ? (row[f] as number).toLocaleString(undefined, {minimumFractionDigits: 2}) : (
+                          {row[f] !== null ? (row[f] as number).toLocaleString(undefined, { minimumFractionDigits: 2 }) : (
                             <span className="text-surface-300 text-[10px] font-bold italic">{t.absent}</span>
                           )}
                           {row[`_synthetic_${f}`] && <History className="w-3.5 h-3.5 opacity-50 ml-2" />}
@@ -214,51 +214,51 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
             <label className="text-[10px] font-bold text-surface-400 uppercase tracking-widest flex items-center gap-2">
               <Hash className="w-3.5 h-3.5 text-brand-500" /> {t.symbol}
             </label>
-            <input 
-              type="text" 
-              placeholder="e.g. BTC-USD" 
-              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-bold focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-sm placeholder:text-surface-300" 
-              value={currentCode} 
-              onChange={e => setCurrentCode(e.target.value.toUpperCase())} 
+            <input
+              type="text"
+              placeholder="e.g. BTC-USD"
+              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-bold focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-sm placeholder:text-surface-300"
+              value={currentCode}
+              onChange={e => setCurrentCode(e.target.value.toUpperCase())}
             />
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-surface-400 uppercase tracking-widest flex items-center gap-2">
               <FileText className="w-3.5 h-3.5 text-brand-500" /> {t.description}
             </label>
-            <input 
-              type="text" 
-              placeholder="e.g. Digital Gold" 
-              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-medium focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-sm placeholder:text-surface-300" 
-              value={currentDescription} 
-              onChange={e => setCurrentDescription(e.target.value)} 
+            <input
+              type="text"
+              placeholder="e.g. Digital Gold"
+              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-medium focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-sm placeholder:text-surface-300"
+              value={currentDescription}
+              onChange={e => setCurrentDescription(e.target.value)}
             />
           </div>
           <div className="space-y-2 md:col-span-2">
             <label className="text-[10px] font-bold text-surface-400 uppercase tracking-widest flex items-center gap-2">
               <ClipboardPaste className="w-3.5 h-3.5 text-brand-500" /> {t.navSet}
             </label>
-            <textarea 
-              placeholder="Date,Value..." 
-              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-mono text-xs h-32 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all resize-none placeholder:text-surface-300" 
-              value={currentText} 
-              onChange={e => setCurrentText(e.target.value)} 
+            <textarea
+              placeholder="Date,Value..."
+              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-mono text-xs h-32 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all resize-none placeholder:text-surface-300"
+              value={currentText}
+              onChange={e => setCurrentText(e.target.value)}
             />
           </div>
         </div>
-        
-        <button 
-          onClick={handleCommit} 
-          disabled={!currentCode || !currentText} 
-          className="w-full py-4 bg-brand-600 hover:bg-brand-700 disabled:bg-surface-200 text-white rounded-xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-[0.98]"
+
+        <button
+          onClick={handleCommit}
+          disabled={!currentCode || !currentText}
+          className="w-full py-4 bg-brand-600 hover:bg-brand-700 disabled:bg-surface-200 text-white rounded-xl font-bold text-sm transition-all duration-200 ease-out shadow-lg flex items-center justify-center gap-2 active:scale-[0.98]"
         >
           <PlusCircle className="w-4 h-4" /> {t.commit}
         </button>
-        
+
         <div className="p-5 bg-surface-50 rounded-2xl border border-surface-200 flex gap-4">
           <Info className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
           <div className="text-[11px] text-surface-500 font-medium leading-relaxed space-y-2">
-            {t.guide.map((g, i) => <div key={i} className="flex gap-2"><span>{i+1}.</span>{g}</div>)}
+            {t.guide.map((g, i) => <div key={i} className="flex gap-2"><span>{i + 1}.</span>{g}</div>)}
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
           </div>
           <span className="px-2 py-0.5 bg-brand-500/20 text-brand-300 text-[10px] font-bold rounded border border-brand-500/30">{entries.length}</span>
         </div>
-        
+
         <div className="flex-grow space-y-3 overflow-y-auto pr-2 custom-scrollbar">
           {!entries.length ? (
             <div className="h-full flex flex-col items-center justify-center opacity-30 text-center space-y-4">
@@ -282,7 +282,7 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
             </div>
           ) : (
             entries.map((e, i) => (
-              <div key={i} className="bg-surface-800/50 p-4 rounded-xl border border-surface-700 flex justify-between items-center group animate-in slide-in-from-right-4">
+              <div key={i} style={{ animationDelay: `${i * 50}ms` }} className="bg-surface-800/50 p-4 rounded-xl border border-surface-700 flex justify-between items-center group animate-in fade-in slide-in-from-right-8 duration-500 ease-out fill-mode-both">
                 <div className="flex flex-col min-w-0">
                   <span className="font-extrabold text-white text-sm tracking-tight truncate">{e.code}</span>
                   <span className="text-[10px] text-surface-400 font-medium truncate block mb-1">{e.description}</span>
@@ -291,18 +291,18 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
                     {parseRawPastedData(e.rawText).length} {t.points}
                   </div>
                 </div>
-                <button onClick={() => setEntries(p => p.filter((_, idx) => idx !== i))} className="p-2 text-surface-600 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all shrink-0">
+                <button onClick={() => setEntries(p => p.filter((_, idx) => idx !== i))} className="p-2 text-surface-600 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all duration-200 ease-out hover:scale-110 hover:rotate-3 active:scale-90 shrink-0">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             ))
           )}
         </div>
-        
-        <button 
-          onClick={startReconciliation} 
-          disabled={!entries.length} 
-          className="mt-10 w-full py-4 bg-white text-surface-900 rounded-xl font-bold text-sm flex items-center justify-center gap-3 transition-all hover:bg-brand-50 disabled:opacity-20 shadow-xl active:scale-[0.98]"
+
+        <button
+          onClick={startReconciliation}
+          disabled={!entries.length}
+          className={`mt-10 w-full py-4 text-surface-900 rounded-xl font-bold text-sm flex items-center justify-center gap-3 transition-all duration-300 ease-out shadow-xl active:scale-[0.98] ${!entries.length ? 'bg-white opacity-20' : 'bg-gradient-to-r from-white via-brand-50 to-white animate-shimmer hover:shadow-2xl hover:scale-[1.01]'}`}
         >
           {t.execute} <ArrowRight className="w-4 h-4" />
         </button>

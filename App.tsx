@@ -133,6 +133,16 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-surface-50 text-surface-900 selection:bg-brand-100 selection:text-brand-900" >
+      <style>{`
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+        .animate-shimmer {
+          background-size: 200% 100%;
+          animation: shimmer 3s infinite linear;
+        }
+      `}</style>
       <header className="sticky top-0 z-50 glass-effect border-b border-surface-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -168,7 +178,7 @@ const App: React.FC = () => {
             {dataset && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-surface-600 hover:text-brand-600 transition-colors bg-white border border-surface-200 rounded-md shadow-sm"
+                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-surface-600 hover:text-brand-600 transition-all duration-200 ease-out active:scale-95 bg-white border border-surface-200 rounded-md shadow-sm"
               >
                 <RefreshCcw className="w-3.5 h-3.5" />
                 {t.reset}
@@ -209,14 +219,14 @@ const App: React.FC = () => {
             <div className="flex bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm">
               <button
                 onClick={() => setInputMode('upload')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === 'upload' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 ease-out active:scale-95 ${inputMode === 'upload' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
               >
                 <FileUp className="w-4 h-4" />
                 {t.upload}
               </button>
               <button
                 onClick={() => setInputMode('restructure')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === 'restructure' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 ease-out active:scale-95 ${inputMode === 'restructure' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
               >
                 <Database className="w-4 h-4" />
                 {t.builder}

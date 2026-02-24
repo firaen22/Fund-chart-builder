@@ -72,16 +72,16 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
           <p className="text-surface-500 text-sm font-medium">{t.import}</p>
         </div>
 
-        <div 
-          className={`relative flex flex-col items-center justify-center p-12 lg:p-16 border-2 border-dashed transition-all duration-300 rounded-3xl group ${dragActive ? 'border-brand-500 bg-brand-50/50 scale-[1.01]' : 'border-surface-200 bg-surface-50/50 hover:border-brand-400 hover:bg-white'}`}
+        <div
+          className={`relative flex flex-col items-center justify-center p-12 lg:p-16 border-2 border-dashed transition-all duration-300 ease-out rounded-3xl group ${dragActive ? 'border-brand-500 bg-brand-50/50 scale-[1.01] shadow-inner ring-4 ring-brand-500/20 animate-pulse' : 'border-surface-200 bg-surface-50/50 hover:border-brand-400 hover:bg-white'}`}
           onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}
         >
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-surface-200 mb-6 text-brand-600 group-hover:scale-110 transition-transform duration-300">
-             <CloudUpload className="w-10 h-10" />
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-surface-200 mb-6 text-brand-600 group-hover:scale-110 group-hover:-translate-y-1 group-hover:shadow-md transition-all duration-300 ease-out">
+            <CloudUpload className="w-10 h-10" />
           </div>
           <p className="text-surface-900 font-bold text-lg mb-1">{t.secure}</p>
           <p className="text-xs text-surface-400 mb-8 font-medium">{t.awaiting}</p>
-          
+
           <label className="cursor-pointer bg-brand-600 hover:bg-brand-700 text-white py-3.5 px-8 rounded-xl text-sm font-bold transition-all shadow-lg active:scale-95 flex items-center gap-3">
             {t.init}
             <input type="file" className="hidden" accept=".csv" onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
@@ -89,12 +89,12 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
         </div>
 
         <div className="flex items-center justify-center gap-4">
-           <button 
-             onClick={() => onDataLoaded(generateDemoData())} 
-             className="flex items-center gap-2 text-[11px] font-bold text-surface-500 hover:text-brand-600 transition-all px-6 py-3 border border-surface-200 bg-white rounded-xl shadow-sm hover:border-brand-200"
-           >
-             <Play className="w-3.5 h-3.5" /> {t.sample}
-           </button>
+          <button
+            onClick={() => onDataLoaded(generateDemoData())}
+            className="flex items-center gap-2 text-[11px] font-bold text-surface-500 hover:text-brand-600 transition-all px-6 py-3 border border-surface-200 bg-white rounded-xl shadow-sm hover:border-brand-200"
+          >
+            <Play className="w-3.5 h-3.5" /> {t.sample}
+          </button>
         </div>
       </div>
 
@@ -108,7 +108,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
               {t.standards}
             </h3>
           </div>
-          
+
           <div className="space-y-8">
             <div className="flex items-start gap-4">
               <div className="mt-1 bg-white p-1.5 border border-surface-200 rounded-lg shadow-sm text-brand-600">
@@ -142,7 +142,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
               <p className="text-surface-900 font-medium">2024-01-02, 105.10, 98.15</p>
             </div>
           </div>
-          
+
           <div className="mt-6 p-4 bg-brand-50 rounded-xl border border-brand-100 flex items-center gap-3">
             <Info className="w-4 h-4 text-brand-600 shrink-0" />
             <p className="text-[10px] font-semibold text-brand-800 leading-snug">
