@@ -143,33 +143,33 @@ const App: React.FC = () => {
           animation: shimmer 3s infinite linear;
         }
       `}</style>
-      <header className="sticky top-0 z-50 glass-effect border-b border-surface-200">
+      <header className="sticky top-0 z-50 bg-slate-900/70 backdrop-blur-md border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-brand-600 p-2 rounded-lg text-white">
+            <div className="bg-brand-500 p-2 rounded-lg text-white shadow-lg">
               <Zap className="w-5 h-5 fill-current" />
             </div>
             <div>
-              <h1 className="text-lg font-bold tracking-tight text-surface-900">
+              <h1 className="text-lg font-bold tracking-tight text-white">
                 {t.title}
               </h1>
-              <p className="text-[10px] text-surface-500 font-medium uppercase tracking-wider">
+              <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
                 {t.subtitle}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 bg-surface-100 p-1 rounded-md border border-surface-200">
+            <div className="flex items-center gap-1 bg-black/20 p-1 rounded-md border border-white/10">
               <button
                 onClick={() => setLang('en')}
-                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'en' ? 'bg-white text-brand-700 shadow-sm border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
+                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'en' ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-slate-400 hover:text-white'}`}
               >
                 EN
               </button>
               <button
                 onClick={() => setLang('cn')}
-                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'cn' ? 'bg-white text-brand-700 shadow-sm border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
+                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'cn' ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-slate-400 hover:text-white'}`}
               >
                 CN
               </button>
@@ -178,7 +178,7 @@ const App: React.FC = () => {
             {dataset && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-surface-600 hover:text-brand-600 transition-all duration-200 ease-out active:scale-95 bg-white border border-surface-200 rounded-md shadow-sm"
+                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-transform duration-200 ease-out active:scale-[0.98] bg-white/5 border border-white/10 hover:bg-white/10 rounded-md shadow-sm"
               >
                 <RefreshCcw className="w-3.5 h-3.5" />
                 {t.reset}
@@ -187,7 +187,7 @@ const App: React.FC = () => {
 
             <button
               onClick={() => setShowKeyModal(true)}
-              className="p-2 text-surface-500 hover:text-surface-900 transition-colors rounded-md hover:bg-surface-100"
+              className="p-2 text-slate-400 hover:text-white transition-colors rounded-md hover:bg-white/10"
               title="API Settings"
             >
               <Settings className="w-5 h-5" />
@@ -216,17 +216,17 @@ const App: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm">
+            <div className="flex bg-black/5 backdrop-blur-sm p-1 rounded-xl border border-black/5 shadow-sm">
               <button
                 onClick={() => setInputMode('upload')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 ease-out active:scale-95 ${inputMode === 'upload' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-transform duration-200 ease-out active:scale-[0.98] ${inputMode === 'upload' ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md border border-brand-500/20' : 'text-slate-500 hover:text-slate-800 hover:bg-black/5'}`}
               >
                 <FileUp className="w-4 h-4" />
                 {t.upload}
               </button>
               <button
                 onClick={() => setInputMode('restructure')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 ease-out active:scale-95 ${inputMode === 'restructure' ? 'bg-white text-brand-700 shadow-md border border-surface-200' : 'text-surface-500 hover:text-surface-900'}`}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-transform duration-200 ease-out active:scale-[0.98] ${inputMode === 'restructure' ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md border border-brand-500/20' : 'text-slate-500 hover:text-slate-800 hover:bg-black/5'}`}
               >
                 <Database className="w-4 h-4" />
                 {t.builder}

@@ -274,24 +274,24 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
 
         <div className="flex-grow space-y-3 overflow-y-auto pr-2 custom-scrollbar">
           {!entries.length ? (
-            <div className="h-full flex flex-col items-center justify-center opacity-30 text-center space-y-4">
-              <div className="p-4 bg-surface-800 rounded-full">
-                <LayoutGrid className="w-8 h-8" />
+            <div className="h-full flex flex-col items-center justify-center opacity-40 text-center space-y-4">
+              <div className="p-4 bg-white/5 rounded-full backdrop-blur-sm border border-white/5">
+                <LayoutGrid className="w-8 h-8 text-white" />
               </div>
-              <p className="text-[10px] font-bold uppercase tracking-widest">{t.empty}</p>
+              <p className="text-[10px] font-bold text-white uppercase tracking-widest">{t.empty}</p>
             </div>
           ) : (
             entries.map((e, i) => (
-              <div key={i} style={{ animationDelay: `${i * 50}ms` }} className="bg-surface-800/50 p-4 rounded-xl border border-surface-700 flex justify-between items-center group animate-in fade-in slide-in-from-right-8 duration-500 ease-out fill-mode-both">
+              <div key={i} style={{ animationDelay: `${i * 50}ms` }} className="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-white/5 flex justify-between items-center group animate-in fade-in slide-in-from-right-8 duration-500 ease-out fill-mode-both hover:-translate-y-0.5 hover:bg-white/10 transition-all shadow-sm">
                 <div className="flex flex-col min-w-0">
                   <span className="font-extrabold text-white text-sm tracking-tight truncate">{e.code}</span>
-                  <span className="text-[10px] text-surface-400 font-medium truncate block mb-1">{e.description}</span>
-                  <div className="flex items-center gap-1.5 text-[9px] text-brand-400 font-bold uppercase tracking-tighter">
+                  <span className="text-[10px] text-slate-300 font-medium truncate block mb-1">{e.description}</span>
+                  <div className="flex items-center gap-1.5 text-[9px] text-brand-300 font-bold uppercase tracking-tighter">
                     <Calendar className="w-3 h-3" />
                     {parseRawPastedData(e.rawText).length} {t.points}
                   </div>
                 </div>
-                <button onClick={() => setEntries(p => p.filter((_, idx) => idx !== i))} className="p-2 text-surface-600 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all duration-200 ease-out hover:scale-110 hover:rotate-3 active:scale-90 shrink-0">
+                <button onClick={() => setEntries(p => p.filter((_, idx) => idx !== i))} className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/20 rounded-lg transition-all duration-200 ease-out hover:scale-110 active:scale-90 shrink-0">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
@@ -302,7 +302,6 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
         <button
           onClick={startReconciliation}
           disabled={!entries.length}
-          className={`mt-10 w-full py-4 text-surface-900 rounded-xl font-bold text-sm flex items-center justify-center gap-3 transition-all duration-300 ease-out shadow-xl active:scale-[0.98] ${!entries.length ? 'bg-white opacity-20' : 'bg-gradient-to-r from-white via-brand-50 to-white animate-shimmer hover:shadow-2xl hover:scale-[1.01]'}`}
         >
           {t.execute} <ArrowRight className="w-4 h-4" />
         </button>

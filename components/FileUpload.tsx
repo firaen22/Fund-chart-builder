@@ -73,16 +73,16 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
         </div>
 
         <div
-          className={`relative flex flex-col items-center justify-center p-12 lg:p-16 border-2 border-dashed transition-all duration-300 ease-out rounded-3xl group ${dragActive ? 'border-brand-500 bg-brand-50/50 scale-[1.01] shadow-inner ring-4 ring-brand-500/20 animate-pulse' : 'border-surface-200 bg-surface-50/50 hover:border-brand-400 hover:bg-white'}`}
+          className={`relative flex flex-col items-center justify-center p-12 lg:p-16 border-2 transition-all duration-300 ease-out rounded-3xl group backdrop-blur-md ${dragActive ? 'bg-slate-800/60 border-indigo-500/50 scale-[1.01] shadow-[0_0_30px_rgba(99,102,241,0.2)] animate-pulse' : 'border-white/10 bg-slate-800/40 hover:border-white/20 hover:bg-slate-800/50'}`}
           onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}
         >
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-surface-200 mb-6 text-brand-600 group-hover:scale-110 group-hover:-translate-y-1 group-hover:shadow-md transition-all duration-300 ease-out">
+          <div className="bg-white/10 p-5 rounded-2xl shadow-sm border border-white/10 mb-6 text-brand-400 group-hover:scale-110 group-hover:-translate-y-1 group-hover:shadow-lg transition-all duration-300 ease-out backdrop-blur-sm">
             <CloudUpload className="w-10 h-10" />
           </div>
-          <p className="text-surface-900 font-bold text-lg mb-1">{t.secure}</p>
-          <p className="text-xs text-surface-400 mb-8 font-medium">{t.awaiting}</p>
+          <p className="text-white font-bold text-lg mb-1">{t.secure}</p>
+          <p className="text-xs text-slate-300 mb-8 font-medium">{t.awaiting}</p>
 
-          <label className="cursor-pointer bg-brand-600 hover:bg-brand-700 text-white py-3.5 px-8 rounded-xl text-sm font-bold transition-all shadow-lg active:scale-95 flex items-center gap-3">
+          <label className="cursor-pointer bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white py-3.5 px-8 rounded-xl text-sm font-bold transition-transform duration-200 active:scale-[0.98] shadow-lg flex items-center gap-3 border border-white/10">
             {t.init}
             <input type="file" className="hidden" accept=".csv" onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
           </label>
