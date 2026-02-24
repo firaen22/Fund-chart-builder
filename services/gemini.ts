@@ -4,7 +4,7 @@ import { FundDataset, Language } from "../types";
 
 export const analyzeFundData = async (dataset: FundDataset, apiKey: string, lang: Language = 'en'): Promise<string> => {
   const ai = new GoogleGenAI({ apiKey });
-  const modelName = 'gemini-3-flash-preview';
+  const modelName = 'gemini-2.5-flash';
 
   const recentData = dataset.data.slice(-25);
   const dataSummary = recentData.map(d => {
