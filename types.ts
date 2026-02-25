@@ -34,8 +34,19 @@ export interface AnalysisMetrics {
   volatility: string;
   maxDrawdown: string;
   sharpeRatio: string;
+  trackingError?: string;
+  rSquared?: string;
 }
 
 export interface FundAnalysis {
   [fundName: string]: AnalysisMetrics;
+}
+
+export interface PortfolioSummary {
+  totalAum: number;
+  portfolioYield: number;
+  maxDrawdown: number;
+  trackingError?: number;
+  rSquared?: number;
+  activeShare?: number;
 }

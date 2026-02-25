@@ -41,7 +41,9 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
         rsi: false,
         sortinoRatio: true,
         beta: false,
-        alpha: false
+        alpha: false,
+        trackingError: true,
+        rSquared: false
     });
 
     const t = {
@@ -64,6 +66,10 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
             betaDesc: "Market volatility vs benchmark",
             alpha: "Alpha",
             alphaDesc: "Excess return vs benchmark",
+            te: "Tracking Error",
+            teDesc: "Active risk vs benchmark",
+            r2: "R-Squared",
+            r2Desc: "Correlation to benchmark",
             rsi: "RSI (14)",
             rsiDesc: "Momentum indicator",
             fund: "Fund Name",
@@ -88,6 +94,10 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
             betaDesc: "相對於基準的波動性",
             alpha: "阿爾法 (Alpha)",
             alphaDesc: "相對於基準的超額回報",
+            te: "追蹤誤差 (TE)",
+            teDesc: "相對於基準的活躍風險",
+            r2: "R平方",
+            r2Desc: "與基準的相關性",
             rsi: "相對強弱指數 (RSI)",
             rsiDesc: "趨勢與買賣力道",
             fund: "基金名稱",
@@ -103,6 +113,8 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
         { key: 'volatility', label: t.volatility, desc: t.volatilityDesc, icon: Activity, color: 'text-orange-500' },
         { key: 'beta', label: t.beta, desc: t.betaDesc, icon: TrendingUp, color: 'text-rose-500' },
         { key: 'alpha', label: t.alpha, desc: t.alphaDesc, icon: Target, color: 'text-amber-500' },
+        { key: 'trackingError', label: t.te, desc: t.teDesc, icon: Activity, color: 'text-sky-600' },
+        { key: 'rSquared', label: t.r2, desc: t.r2Desc, icon: TrendingUp, color: 'text-rose-600' },
         { key: 'rsi', label: t.rsi, desc: t.rsiDesc, icon: BarChart2, color: 'text-purple-600' },
     ];
 
@@ -211,7 +223,7 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
                                             let colorClass = 'text-surface-600';
 
                                             if (value !== undefined && value !== null && !isNaN(value)) {
-                                                if (m.key === 'cumulativeReturn' || m.key === 'maxDrawdown' || m.key === 'volatility' || m.key === 'alpha') {
+                                                if (m.key === 'cumulativeReturn' || m.key === 'maxDrawdown' || m.key === 'volatility' || m.key === 'alpha' || m.key === 'trackingError') {
                                                     displayValue = (value * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
                                                     if (m.key === 'cumulativeReturn' || m.key === 'alpha') {
                                                         colorClass = value >= 0 ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold';

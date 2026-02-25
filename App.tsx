@@ -23,6 +23,7 @@ const DataRestructurer = lazy(() => import('./components/DataRestructurer').then
 const FinancialMetrics = lazy(() => import('./components/FinancialMetrics').then(m => ({ default: m.FinancialMetrics })));
 const ChatInterface = lazy(() => import('./components/ChatInterface').then(m => ({ default: m.ChatInterface })));
 const HistoricalRegistry = lazy(() => import('./components/HistoricalRegistry').then(m => ({ default: m.HistoricalRegistry })));
+const AGIPortfolioManager = lazy(() => import('./components/AGIPortfolioManager').then(m => ({ default: m.AGIPortfolioManager })));
 
 const App: React.FC = () => {
   const [lang, setLang] = useState<Language>('en');
@@ -30,6 +31,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'raw' | 'normalized'>('normalized');
   const [inputMode, setInputMode] = useState<'upload' | 'restructure'>('upload');
+  const [dashboardTab, setDashboardTab] = useState<'analytics' | 'agi'>('analytics');
 
   // AI & API Key State
   const [apiKey, setApiKey] = useState<string>(() => localStorage.getItem('gemini_api_key') || '');
@@ -55,7 +57,9 @@ const App: React.FC = () => {
       window: "Date Range",
       registry: "Historical Ledger",
       to: "to",
-      error: "Data parsing failed. Check format integrity."
+      error: "Data parsing failed. Check format integrity.",
+      agiManager: "AGI Manager",
+      analytics: "Analytics"
     },
     cn: {
       title: "基金圖表構建器",
@@ -74,7 +78,9 @@ const App: React.FC = () => {
       window: "日期範圍",
       registry: "歷史台賬",
       to: "至",
-      error: "數據解析失敗。請檢查格式完整性。"
+      error: "數據解析失敗。請檢查格式完整性。",
+      agiManager: "AGI 管理器",
+      analytics: "數據分析"
     }
   }[lang];
 
@@ -262,96 +268,140 @@ const App: React.FC = () => {
           <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-2 py-0.5 rounded border border-brand-100">{t.review}</span>
+                <div className="flex bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm w-fit mb-4">
+                  <button
+                    onClick={() => setDashboardTab('analytics')}
+                    className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-transform duration-200 ease-out active:scale-[0.98] ${dashboardTab === 'analytics' ? 'bg-white text-brand-700 shadow-sm border border-surface-200' : 'text-surface-500 hover:text-surface-800 hover:bg-black/5'}`}
+                  >
+                    <Activity className="w-4 h-4" />
+                    {t.analytics}
+                  </button>
+                  <button
+                    onClick={() => setDashboardTab('agi')}
+                    className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-transform duration-200 ease-out active:scale-[0.98] ${dashboardTab === 'agi' ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md border border-brand-500/20' : 'text-surface-500 hover:text-surface-800 hover:bg-black/5'}`}
+                  >
+                    <Zap className="w-4 h-4" />
+                    {t.agiManager}
+                  </button>
                 </div>
-                <h2 className="text-3xl font-extrabold tracking-tight text-surface-900">{t.perfTitle}</h2>
+
+                {dashboardTab === 'analytics' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-2 py-0.5 rounded border border-brand-100">{t.review}</span>
+                    </div>
+                    <h2 className="text-3xl font-extrabold tracking-tight text-surface-900">{t.perfTitle}</h2>
+                  </>
+                )}
               </div>
 
-              <div className="bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm flex items-center">
-                <button
-                  onClick={() => setViewMode('normalized')}
-                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewMode === 'normalized'
-                    ? 'bg-white text-brand-700 shadow-md border border-surface-200'
-                    : 'text-surface-500 hover:text-surface-700'
-                    }`}
-                >
-                  <TrendingUp className="w-3.5 h-3.5" />
-                  {t.rebased}
-                </button>
-                <button
-                  onClick={() => setViewMode('raw')}
-                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewMode === 'raw'
-                    ? 'bg-white text-brand-700 shadow-md border border-surface-200'
-                    : 'text-surface-500 hover:text-surface-700'
-                    }`}
-                >
-                  <DollarSign className="w-3.5 h-3.5" />
-                  {t.marketVal}
-                </button>
-              </div>
+              {dashboardTab === 'analytics' && (
+                <div className="bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm flex items-center">
+                  <button
+                    onClick={() => setViewMode('normalized')}
+                    className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewMode === 'normalized'
+                      ? 'bg-white text-brand-700 shadow-md border border-surface-200'
+                      : 'text-surface-500 hover:text-surface-700'
+                      }`}
+                  >
+                    <TrendingUp className="w-3.5 h-3.5" />
+                    {t.rebased}
+                  </button>
+                  <button
+                    onClick={() => setViewMode('raw')}
+                    className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewMode === 'raw'
+                      ? 'bg-white text-brand-700 shadow-md border border-surface-200'
+                      : 'text-surface-500 hover:text-surface-700'
+                      }`}
+                  >
+                    <DollarSign className="w-3.5 h-3.5" />
+                    {t.marketVal}
+                  </button>
+                </div>
+              )}
             </div>
 
-            <div className="bg-white p-8 rounded-3xl border border-surface-200 shadow-lg relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-[0.03]">
-                <Activity className="w-32 h-32 text-brand-600" />
-              </div>
-              <Suspense fallback={<div className="h-[500px] w-full animate-pulse bg-surface-50 rounded-xl"></div>}>
-                <FundChart dataset={chartDataset} viewMode={viewMode} lang={lang} />
-              </Suspense>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.records}</span>
-                <div className="flex items-end justify-between">
-                  <p className="text-3xl font-extrabold text-surface-900">{dataset.data.length.toLocaleString()}</p>
-                  <LineChart className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+            {dashboardTab === 'agi' ? (
+              <div className="animate-in fade-in zoom-in-95 duration-500">
+                <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                  <AGIPortfolioManager dataset={chartDataset} lang={lang} />
+                </Suspense>
+                <div className="mt-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
+                  <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                    <ChatInterface
+                      analysis={analysis}
+                      isAnalyzing={isAnalyzing}
+                      onRunAnalysis={handleRunAnalysis}
+                      hasData={!!dataset}
+                      lang={lang}
+                    />
+                  </Suspense>
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.assets}</span>
-                <div className="flex items-end justify-between">
-                  <p className="text-3xl font-extrabold text-surface-900">{dataset.funds.length}</p>
-                  <Database className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+            ) : (
+              <>
+                <div className="bg-white p-8 rounded-3xl border border-surface-200 shadow-lg relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-[0.03]">
+                    <Activity className="w-32 h-32 text-brand-600" />
+                  </div>
+                  <Suspense fallback={<div className="h-[500px] w-full animate-pulse bg-surface-50 rounded-xl"></div>}>
+                    <FundChart dataset={chartDataset} viewMode={viewMode} lang={lang} />
+                  </Suspense>
                 </div>
-              </div>
-              <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.window}</span>
-                <div className="flex items-end justify-between">
-                  <p className="text-sm font-bold text-surface-900 leading-tight">
-                    <span className="text-brand-600 tabular-nums">{dataset.data[0]?.date}</span>
-                    <span className="block text-[10px] text-surface-400 my-0.5 uppercase tracking-tighter">{t.to}</span>
-                    <span className="text-brand-600 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
-                  </p>
-                  <Settings className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                    <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.records}</span>
+                    <div className="flex items-end justify-between">
+                      <p className="text-3xl font-extrabold text-surface-900">{dataset.data.length.toLocaleString()}</p>
+                      <LineChart className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                    </div>
+                  </div>
+                  <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                    <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.assets}</span>
+                    <div className="flex items-end justify-between">
+                      <p className="text-3xl font-extrabold text-surface-900">{dataset.funds.length}</p>
+                      <Database className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                    </div>
+                  </div>
+                  <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
+                    <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.window}</span>
+                    <div className="flex items-end justify-between">
+                      <p className="text-sm font-bold text-surface-900 leading-tight">
+                        <span className="text-brand-600 tabular-nums">{dataset.data[0]?.date}</span>
+                        <span className="block text-[10px] text-surface-400 my-0.5 uppercase tracking-tighter">{t.to}</span>
+                        <span className="text-brand-600 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
+                      </p>
+                      <Settings className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
-              <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
-                <FinancialMetrics dataset={chartDataset} lang={lang} />
-              </Suspense>
-            </div>
+                <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                  <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                    <FinancialMetrics dataset={chartDataset} lang={lang} />
+                  </Suspense>
+                </div>
 
-            <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-100">
-              <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
-                <ChatInterface
-                  analysis={analysis}
-                  isAnalyzing={isAnalyzing}
-                  onRunAnalysis={handleRunAnalysis}
-                  hasData={!!dataset}
-                  lang={lang}
-                />
-              </Suspense>
-            </div>
+                <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-100">
+                  <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                    <ChatInterface
+                      analysis={analysis}
+                      isAnalyzing={isAnalyzing}
+                      onRunAnalysis={handleRunAnalysis}
+                      hasData={!!dataset}
+                      lang={lang}
+                    />
+                  </Suspense>
+                </div>
 
-            <div className="animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-200">
-              <Suspense fallback={<div className="h-[400px] border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
-                <HistoricalRegistry dataset={dataset} lang={lang} />
-              </Suspense>
-            </div>
+                <div className="animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-200">
+                  <Suspense fallback={<div className="h-[400px] border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                    <HistoricalRegistry dataset={dataset} lang={lang} />
+                  </Suspense>
+                </div>
+              </>
+            )}
           </div>
         )}
       </main>
