@@ -60,29 +60,29 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
   };
 
   return (
-    <div className="w-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-white/5">
+    <div className="w-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-black/5 dark:divide-white/5 transition-colors duration-500">
       <div className="flex-grow p-10 lg:p-14 space-y-10">
         <div className="space-y-1">
           <div className="flex items-center gap-2 mb-2">
-            <div className="bg-indigo-500/10 px-2 py-1 rounded text-indigo-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 border border-indigo-500/20">
+            <div className="bg-indigo-500/10 dark:bg-indigo-500/10 px-2 py-1 rounded text-indigo-600 dark:text-indigo-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 border border-indigo-500/20">
               <Lock className="w-3 h-3" /> Secure Ingest
             </div>
           </div>
-          <h2 className="text-3xl font-black text-white tracking-tight">{t.gateway}</h2>
-          <p className="text-slate-400 text-sm font-medium">{t.import}</p>
+          <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{t.gateway}</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{t.import}</p>
         </div>
 
         <div
-          className={`relative flex flex-col items-center justify-center p-12 lg:p-16 border-2 transition-all duration-300 ease-out rounded-[2rem] group backdrop-blur-xl ${dragActive ? 'bg-indigo-500/10 border-indigo-500/50 scale-[1.01] shadow-[0_0_50px_rgba(99,102,241,0.2)] animate-pulse' : 'border-white/5 bg-white/5 hover:border-white/10 hover:bg-white/10'}`}
+          className={`relative flex flex-col items-center justify-center p-12 lg:p-16 border-2 transition-all duration-300 ease-out rounded-[2rem] group backdrop-blur-xl ${dragActive ? 'bg-indigo-500/10 border-indigo-500/50 scale-[1.01] shadow-[0_0_50px_rgba(99,102,241,0.2)] animate-pulse' : 'border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 hover:border-black/10 dark:hover:border-white/10 hover:bg-black/10 dark:hover:bg-white/10'}`}
           onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}
         >
-          <div className="bg-white/5 p-6 rounded-2xl shadow-2xl border border-white/10 mb-6 text-indigo-400 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 ease-out backdrop-blur-md">
+          <div className="bg-white/80 dark:bg-white/5 p-6 rounded-2xl shadow-2xl border border-black/5 dark:border-white/10 mb-6 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 ease-out backdrop-blur-md">
             <CloudUpload className="w-12 h-12" />
           </div>
-          <p className="text-white font-black text-xl mb-1 tracking-tight">{t.secure}</p>
-          <p className="text-xs text-slate-400 mb-10 font-medium tracking-wide">{t.awaiting}</p>
+          <p className="text-slate-900 dark:text-white font-black text-xl mb-1 tracking-tight">{t.secure}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-10 font-medium tracking-wide">{t.awaiting}</p>
 
-          <label className="cursor-pointer glass-cta py-4 px-10 rounded-xl text-sm font-bold shadow-2xl flex items-center gap-3">
+          <label className="cursor-pointer glass-cta py-4 px-10 rounded-xl text-sm font-bold shadow-2xl flex items-center gap-3 active:scale-95 transition-transform">
             {t.init}
             <input type="file" className="hidden" accept=".csv" onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
           </label>
@@ -91,61 +91,61 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
         <div className="flex items-center justify-center">
           <button
             onClick={() => onDataLoaded(generateDemoData())}
-            className="flex items-center gap-2 text-[11px] font-bold glass-button-secondary px-8 py-3.5 rounded-xl uppercase tracking-widest"
+            className="flex items-center gap-2 text-[11px] font-bold glass-button-secondary px-8 py-3.5 rounded-xl uppercase tracking-widest active:scale-95 transition-transform"
           >
             <Play className="w-3.5 h-3.5 fill-current" /> {t.sample}
           </button>
         </div>
       </div>
 
-      <div className="w-full md:w-[380px] p-10 lg:p-14 bg-black/20 backdrop-blur-3xl flex flex-col justify-between">
+      <div className="w-full md:w-[380px] p-10 lg:p-14 bg-white/40 dark:bg-black/20 backdrop-blur-3xl flex flex-col justify-between transition-colors duration-500">
         <div className="space-y-8">
           <div className="flex items-center gap-3">
             <div className="glass-cta w-10 h-10 rounded-xl flex items-center justify-center">
               <FileType className="w-5 h-5" />
             </div>
-            <h3 className="text-xs font-black text-white uppercase tracking-[0.2em]">
+            <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
               {t.standards}
             </h3>
           </div>
 
           <div className="space-y-10">
             <div className="flex items-start gap-4">
-              <div className="mt-1 bg-white/5 p-2 border border-white/10 rounded-xl text-indigo-400 shadow-xl">
+              <div className="mt-1 bg-black/5 dark:bg-white/5 p-2 border border-black/5 dark:border-white/10 rounded-xl text-indigo-600 dark:text-indigo-400 shadow-xl">
                 <Calendar className="w-4 h-4" />
               </div>
               <div>
-                <p className="font-black text-xs text-white mb-1 uppercase tracking-wider">{t.col1}</p>
-                <p className="text-[11px] text-slate-400 leading-relaxed font-medium">{t.col1Desc}</p>
+                <p className="font-black text-xs text-slate-900 dark:text-white mb-1 uppercase tracking-wider">{t.col1}</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{t.col1Desc}</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="mt-1 bg-white/5 p-2 border border-white/10 rounded-xl text-indigo-400 shadow-xl">
+              <div className="mt-1 bg-black/5 dark:bg-white/5 p-2 border border-black/5 dark:border-white/10 rounded-xl text-indigo-600 dark:text-indigo-400 shadow-xl">
                 <CheckCircle2 className="w-4 h-4" />
               </div>
               <div>
-                <p className="font-black text-xs text-white mb-1 uppercase tracking-wider">{t.col2}</p>
-                <p className="text-[11px] text-slate-400 leading-relaxed font-medium">{t.col2Desc}</p>
+                <p className="font-black text-xs text-slate-900 dark:text-white mb-1 uppercase tracking-wider">{t.col2}</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{t.col2Desc}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="mt-12">
-          <div className="bg-black/40 p-6 rounded-2xl border border-white/5 font-mono text-[11px] text-slate-400 relative overflow-hidden shadow-2xl backdrop-blur-md">
-            <div className="absolute top-0 right-0 bg-white/5 text-white/50 px-3 py-1.5 text-[9px] font-black uppercase rounded-bl-xl border-l border-b border-white/5">
+          <div className="bg-white/60 dark:bg-black/40 p-6 rounded-2xl border border-black/5 dark:border-white/5 font-mono text-[11px] text-slate-500 dark:text-slate-400 relative overflow-hidden shadow-2xl backdrop-blur-md transition-colors duration-500">
+            <div className="absolute top-0 right-0 bg-black/5 dark:bg-white/5 text-slate-500 dark:text-white/50 px-3 py-1.5 text-[9px] font-black uppercase rounded-bl-xl border-l border-b border-black/5 dark:border-white/5">
               {t.schema}
             </div>
             <div className="pt-4">
-              <p className="text-slate-600 mb-2">// Date, Asset_A, Asset_B</p>
-              <p className="text-indigo-300 font-medium">2024-01-01, 104.22, 98.40</p>
-              <p className="text-indigo-300 font-medium opacity-80">2024-01-02, 105.10, 98.15</p>
+              <p className="text-slate-400 dark:text-slate-600 mb-2">// Date, Asset_A, Asset_B</p>
+              <p className="text-indigo-600 dark:text-indigo-300 font-medium">2024-01-01, 104.22, 98.40</p>
+              <p className="text-indigo-600 dark:text-indigo-300 font-medium opacity-80">2024-01-02, 105.10, 98.15</p>
             </div>
           </div>
 
           <div className="mt-8 p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 flex items-start gap-4 shadow-xl">
-            <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
-            <p className="text-[10px] font-bold text-slate-400 leading-normal uppercase tracking-wider">
+            <Info className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+            <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-normal uppercase tracking-wider">
               Encrypted ingestion ensures data remains localized to your current session.
             </p>
           </div>

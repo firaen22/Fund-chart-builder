@@ -14,7 +14,9 @@ import {
   Zap,
   Globe,
   Settings,
-  ShieldCheck
+  ShieldCheck,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 const FileUpload = lazy(() => import('./components/FileUpload').then(m => ({ default: m.FileUpload })));
@@ -38,6 +40,26 @@ const App: React.FC = () => {
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Theme State
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme') as 'light' | 'dark';
+      if (saved) return saved;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return 'dark';
+  });
+
+  React.useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   const t = {
     en: {
@@ -138,7 +160,7 @@ const App: React.FC = () => {
   }, [dataset, viewMode]);
 
   return (
-    <div className="min-h-screen text-slate-100 selection:bg-indigo-500/30 selection:text-white pb-20" >
+    <div className="min-h-screen text-slate-900 dark:text-slate-100 selection:bg-indigo-500/30 selection:text-white pb-20 transition-colors duration-500" >
       <style>{`
         @keyframes shimmer {
           0% { background-position: 200% 0; }
@@ -149,33 +171,41 @@ const App: React.FC = () => {
           animation: shimmer 3s infinite linear;
         }
       `}</style>
-      <header className="sticky top-0 z-50 glass-panel border-b-white/5">
+      <header className="sticky top-0 z-50 glass-panel border-b-black/5 dark:border-b-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-brand-500 p-2 rounded-lg text-white shadow-lg">
               <Zap className="w-5 h-5 fill-current" />
             </div>
             <div>
-              <h1 className="text-lg font-bold tracking-tight text-white">
+              <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
                 {t.title}
               </h1>
-              <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
                 {t.subtitle}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 bg-black/40 p-1 rounded-lg border border-white/5">
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-all rounded-xl hover:bg-black/5 dark:hover:bg-white/10"
+              title="Toggle Theme"
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+
+            <div className="flex items-center gap-1 bg-black/5 dark:bg-black/40 p-1 rounded-xl border border-black/5 dark:border-white/5 shadow-inner">
               <button
                 onClick={() => setLang('en')}
-                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'en' ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-slate-400 hover:text-white'}`}
+                className={`px-3 py-1 text-[10px] font-bold rounded-lg transition-all ${lang === 'en' ? 'bg-white/80 dark:bg-white/10 text-slate-900 dark:text-white shadow-sm border border-black/5 dark:border-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
               >
                 EN
               </button>
               <button
                 onClick={() => setLang('cn')}
-                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'cn' ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-slate-400 hover:text-white'}`}
+                className={`px-3 py-1 text-[10px] font-bold rounded-lg transition-all ${lang === 'cn' ? 'bg-white/80 dark:bg-white/10 text-slate-900 dark:text-white shadow-sm border border-black/5 dark:border-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
               >
                 CN
               </button>
@@ -193,7 +223,7 @@ const App: React.FC = () => {
 
             <button
               onClick={() => setShowKeyModal(true)}
-              className="p-2 text-slate-400 hover:text-white transition-colors rounded-md hover:bg-white/10"
+              className="p-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-all rounded-xl hover:bg-black/5 dark:hover:bg-white/10"
               title="API Settings"
             >
               <Settings className="w-5 h-5" />
@@ -214,26 +244,26 @@ const App: React.FC = () => {
         {!dataset || !chartDataset ? (
           <div className="space-y-10 flex flex-col items-center justify-center min-h-[60vh] py-12">
             <div className="text-center max-w-xl space-y-4">
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10 shadow-2xl">
-                <Globe className="w-8 h-8 text-indigo-400" />
+              <div className="w-16 h-16 bg-black/5 dark:bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-black/5 dark:border-white/10 shadow-2xl">
+                <Globe className="w-8 h-8 text-indigo-500 dark:text-indigo-400" />
               </div>
-              <h2 className="text-4xl font-black tracking-tight text-white mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">{t.ingestion}</h2>
-              <p className="text-slate-400 font-medium leading-relaxed max-w-md mx-auto">
+              <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-4 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 to-slate-500 dark:from-white dark:to-slate-400">{t.ingestion}</h2>
+              <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-md mx-auto">
                 {t.ingestionSub}
               </p>
             </div>
 
-            <div className="flex bg-black/40 backdrop-blur-md p-1.5 rounded-2xl border border-white/5 shadow-2xl">
+            <div className="flex bg-white/40 dark:bg-black/40 backdrop-blur-md p-1.5 rounded-2xl border border-black/5 dark:border-white/5 shadow-2xl">
               <button
                 onClick={() => setInputMode('upload')}
-                className={`flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition-all ${inputMode === 'upload' ? 'glass-cta shadow-indigo-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                className={`flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition-all ${inputMode === 'upload' ? 'glass-cta shadow-indigo-500/20' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'}`}
               >
                 <FileUp className="w-4 h-4" />
                 {t.upload}
               </button>
               <button
                 onClick={() => setInputMode('restructure')}
-                className={`flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition-all ${inputMode === 'restructure' ? 'glass-cta shadow-indigo-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                className={`flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition-all ${inputMode === 'restructure' ? 'glass-cta shadow-indigo-500/20' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'}`}
               >
                 <Database className="w-4 h-4" />
                 {t.builder}
@@ -247,11 +277,11 @@ const App: React.FC = () => {
                 </div>
               }>
                 {inputMode === 'upload' ? (
-                  <div className="glass-panel rounded-[2rem] border-white/5 overflow-hidden p-3 shadow-2xl">
+                  <div className="glass-panel rounded-[2rem] border-black/5 dark:border-white/5 overflow-hidden p-3 shadow-2xl">
                     <FileUpload onDataLoaded={handleDataLoaded} lang={lang} />
                   </div>
                 ) : (
-                  <div className="glass-panel rounded-[2rem] border-white/5 overflow-hidden p-3 shadow-2xl">
+                  <div className="glass-panel rounded-[2rem] border-black/5 dark:border-white/5 overflow-hidden p-3 shadow-2xl">
                     <DataRestructurer onComplete={handleRestructureComplete} lang={lang} />
                   </div>
                 )}
@@ -269,17 +299,17 @@ const App: React.FC = () => {
           <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
               <div className="space-y-1">
-                <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 shadow-2xl w-fit mb-6">
+                <div className="flex bg-black/5 dark:bg-white/5 p-1 rounded-2xl border border-black/5 dark:border-white/10 shadow-2xl w-fit mb-6">
                   <button
                     onClick={() => setDashboardTab('analytics')}
-                    className={`flex items-center gap-2 px-6 py-2.5 text-xs font-bold rounded-xl transition-all ${dashboardTab === 'analytics' ? 'bg-white/15 text-white shadow-lg border border-white/10' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                    className={`flex items-center gap-2 px-6 py-2.5 text-xs font-bold rounded-xl transition-all ${dashboardTab === 'analytics' ? 'bg-white/80 dark:bg-white/15 text-slate-900 dark:text-white shadow-lg border border-black/5 dark:border-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'}`}
                   >
                     <Activity className="w-4 h-4" />
                     {t.analytics}
                   </button>
                   <button
                     onClick={() => setDashboardTab('agi')}
-                    className={`flex items-center gap-2 px-6 py-2.5 text-xs font-bold rounded-xl transition-all ${dashboardTab === 'agi' ? 'glass-cta' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                    className={`flex items-center gap-2 px-6 py-2.5 text-xs font-bold rounded-xl transition-all ${dashboardTab === 'agi' ? 'glass-cta' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'}`}
                   >
                     <Zap className="w-4 h-4" />
                     {t.agiManager}
@@ -289,20 +319,20 @@ const App: React.FC = () => {
                 {dashboardTab === 'analytics' && (
                   <>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">{t.review}</span>
+                      <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-widest bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">{t.review}</span>
                     </div>
-                    <h2 className="text-3xl font-black tracking-tight text-white">{t.perfTitle}</h2>
+                    <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">{t.perfTitle}</h2>
                   </>
                 )}
               </div>
 
               {dashboardTab === 'analytics' && (
-                <div className="bg-white/5 p-1 rounded-2xl border border-white/10 shadow-2xl flex items-center">
+                <div className="bg-black/5 dark:bg-white/5 p-1 rounded-2xl border border-black/5 dark:border-white/10 shadow-2xl flex items-center">
                   <button
                     onClick={() => setViewMode('normalized')}
                     className={`flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-xl transition-all ${viewMode === 'normalized'
-                      ? 'bg-white/15 text-white shadow-lg border border-white/10'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-white/80 dark:bg-white/15 text-slate-900 dark:text-white shadow-lg border border-black/5 dark:border-white/10'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-slate-200'
                       }`}
                   >
                     <TrendingUp className="w-3.5 h-3.5" />
@@ -311,8 +341,8 @@ const App: React.FC = () => {
                   <button
                     onClick={() => setViewMode('raw')}
                     className={`flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-xl transition-all ${viewMode === 'raw'
-                      ? 'bg-white/15 text-white shadow-lg border border-white/10'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-white/80 dark:bg-white/15 text-slate-900 dark:text-white shadow-lg border border-black/5 dark:border-white/10'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-slate-200'
                       }`}
                   >
                     <DollarSign className="w-3.5 h-3.5" />
@@ -351,29 +381,29 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="glass-panel p-6 rounded-2xl border-white/5 shadow-lg group glass-interactive">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">{t.records}</span>
+                  <div className="glass-panel p-6 rounded-2xl border-black/5 dark:border-white/5 shadow-lg group glass-interactive">
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-widest block mb-1">{t.records}</span>
                     <div className="flex items-end justify-between">
-                      <p className="text-3xl font-black text-white">{dataset.data.length.toLocaleString()}</p>
-                      <LineChart className="w-8 h-8 text-indigo-400/20 group-hover:text-indigo-400/50 transition-colors" />
+                      <p className="text-3xl font-black text-slate-900 dark:text-white">{dataset.data.length.toLocaleString()}</p>
+                      <LineChart className="w-8 h-8 text-indigo-500/20 group-hover:text-indigo-500/50 transition-colors" />
                     </div>
                   </div>
-                  <div className="glass-panel p-6 rounded-2xl border-white/5 shadow-lg group glass-interactive">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">{t.assets}</span>
+                  <div className="glass-panel p-6 rounded-2xl border-black/5 dark:border-white/5 shadow-lg group glass-interactive">
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-widest block mb-1">{t.assets}</span>
                     <div className="flex items-end justify-between">
-                      <p className="text-3xl font-black text-white">{dataset.funds.length}</p>
-                      <Database className="w-8 h-8 text-indigo-400/20 group-hover:text-indigo-400/50 transition-colors" />
+                      <p className="text-3xl font-black text-slate-900 dark:text-white">{dataset.funds.length}</p>
+                      <Database className="w-8 h-8 text-indigo-500/20 group-hover:text-indigo-500/50 transition-colors" />
                     </div>
                   </div>
-                  <div className="glass-panel p-6 rounded-2xl border-white/5 shadow-lg group glass-interactive">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">{t.window}</span>
+                  <div className="glass-panel p-6 rounded-2xl border-black/5 dark:border-white/5 shadow-lg group glass-interactive">
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-widest block mb-1">{t.window}</span>
                     <div className="flex items-end justify-between">
-                      <div className="text-sm font-bold text-white leading-tight">
-                        <span className="text-indigo-300 tabular-nums">{dataset.data[0]?.date}</span>
+                      <div className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
+                        <span className="text-indigo-600 dark:text-indigo-300 tabular-nums">{dataset.data[0]?.date}</span>
                         <span className="block text-[10px] text-slate-500 my-0.5 uppercase tracking-tighter opacity-70">{t.to}</span>
-                        <span className="text-indigo-300 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
+                        <span className="text-indigo-600 dark:text-indigo-300 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
                       </div>
-                      <Settings className="w-8 h-8 text-indigo-400/20 group-hover:text-indigo-400/50 transition-colors" />
+                      <Settings className="w-8 h-8 text-indigo-500/20 group-hover:text-indigo-400/50 transition-colors" />
                     </div>
                   </div>
                 </div>
@@ -407,9 +437,9 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <footer className="py-20 text-center border-t border-white/5 mt-20 bg-black/40 backdrop-blur-xl">
-        <div className="bg-white/5 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10 shadow-lg">
-          <Zap className="w-6 h-6 text-indigo-400" />
+      <footer className="py-20 text-center border-t border-black/5 dark:border-white/5 mt-20 bg-white/40 dark:bg-black/40 backdrop-blur-xl">
+        <div className="bg-black/5 dark:bg-white/5 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-black/5 dark:border-white/10 shadow-lg">
+          <Zap className="w-6 h-6 text-indigo-500 dark:text-indigo-400" />
         </div>
         <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500">
           {lang === 'cn' ? '基金圖表構建器 — 企業版' : 'Fund Chart Builder — Enterprise Edition'}

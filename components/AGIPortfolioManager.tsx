@@ -78,9 +78,9 @@ export const AGIPortfolioManager: React.FC<Props> = ({ dataset, lang }) => {
 
     if (!selectedFund || dataset.funds.length === 0) {
         return (
-            <div className="glass-panel rounded-[2rem] p-12 border-white/5 shadow-2xl text-center backdrop-blur-3xl animate-in fade-in zoom-in-95 duration-700">
-                <Activity className="w-16 h-16 mx-auto mb-6 text-slate-700 animate-pulse" />
-                <p className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-500">{t.noData}</p>
+            <div className="glass-panel rounded-[2rem] p-12 border-black/5 dark:border-white/5 shadow-2xl text-center backdrop-blur-3xl animate-in fade-in zoom-in-95 duration-700 transition-colors duration-500">
+                <Activity className="w-16 h-16 mx-auto mb-6 text-slate-300 dark:text-slate-700 animate-pulse" />
+                <p className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-500 dark:text-slate-500">{t.noData}</p>
             </div>
         );
     }
@@ -94,43 +94,43 @@ export const AGIPortfolioManager: React.FC<Props> = ({ dataset, lang }) => {
     if (trackingError !== undefined) {
         if (trackingError < 0.01) {
             strategyClassification = t.passive;
-            strategyStyle = 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+            strategyStyle = 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20';
         } else if (trackingError <= 0.03) {
             strategyClassification = t.activeLite;
-            strategyStyle = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+            strategyStyle = 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20';
         } else {
             strategyClassification = t.active;
-            strategyStyle = 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
+            strategyStyle = 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20';
         }
     }
 
     const isClosetIndexing = rSquared !== undefined && rSquared > 0.95 && trackingError !== undefined && trackingError < 0.02;
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            <div className="glass-panel rounded-[2.5rem] p-10 border-white/5 shadow-3xl backdrop-blur-3xl overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none scale-150">
-                    <Target className="w-64 h-64" />
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 transition-colors duration-500">
+            <div className="glass-panel rounded-[2.5rem] p-10 border-black/5 dark:border-white/5 shadow-3xl backdrop-blur-3xl overflow-hidden relative transition-colors duration-500">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none scale-150 group-hover:scale-175 transition-transform duration-700">
+                    <Target className="w-64 h-64 dark:text-white text-black" />
                 </div>
 
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-10 relative z-10">
                     <div className="flex items-center gap-5">
-                        <div className="glass-cta p-4 rounded-2xl shadow-2xl shadow-indigo-500/20">
+                        <div className="glass-cta p-4 rounded-2xl shadow-2xl shadow-indigo-500/20 flex items-center justify-center">
                             <Target className="w-8 h-8 text-white" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-white tracking-tight uppercase tracking-[0.05em]">{t.title}</h2>
-                            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1.5">{t.subtitle}</p>
+                            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase tracking-[0.05em]">{t.title}</h2>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-500 font-black uppercase tracking-[0.3em] mt-1.5">{t.subtitle}</p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-4 w-full lg:w-auto bg-black/20 p-2 rounded-2xl border border-white/5 shadow-inner">
+                    <div className="flex items-center gap-4 w-full lg:w-auto bg-white/40 dark:bg-black/20 p-2 rounded-2xl border border-black/5 dark:border-white/5 shadow-inner transition-colors duration-500 group">
                         <select
                             value={selectedFund}
                             onChange={(e) => setSelectedFund(e.target.value)}
-                            className="w-full lg:w-72 bg-transparent border-none text-white text-sm rounded-xl focus:ring-0 block p-3 font-black uppercase tracking-wider cursor-pointer hover:bg-white/5 transition-colors"
+                            className="w-full lg:w-72 bg-transparent border-none text-slate-900 dark:text-white text-sm rounded-xl focus:ring-0 block p-3 font-black uppercase tracking-wider cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                         >
                             {dataset.funds.map(fund => (
-                                <option key={fund} value={fund} className="bg-slate-900 text-white font-bold">{fund}</option>
+                                <option key={fund} value={fund} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold">{fund}</option>
                             ))}
                         </select>
                     </div>
@@ -138,7 +138,7 @@ export const AGIPortfolioManager: React.FC<Props> = ({ dataset, lang }) => {
 
                 {strategyClassification && (
                     <div className="mb-10 relative z-10">
-                        <span className={`inline-flex items-center gap-3 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] border backdrop-blur-md shadow-2xl ${strategyStyle}`}>
+                        <span className={`inline-flex items-center gap-3 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] border backdrop-blur-md shadow-2xl transition-all duration-300 ${strategyStyle}`}>
                             <Shield className="w-4 h-4" />
                             {strategyClassification}
                         </span>
@@ -151,44 +151,44 @@ export const AGIPortfolioManager: React.FC<Props> = ({ dataset, lang }) => {
                             <AlertTriangle className="w-5 h-5 text-white flex-shrink-0" />
                         </div>
                         <div>
-                            <h4 className="text-[11px] font-black text-rose-400 uppercase tracking-[0.4em] mb-2">{t.warning}</h4>
-                            <p className="text-sm text-slate-400 font-medium leading-relaxed tracking-wide">{t.closetIndexing}</p>
+                            <h4 className="text-[11px] font-black text-rose-600 dark:text-rose-400 uppercase tracking-[0.4em] mb-2">{t.warning}</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed tracking-wide">{t.closetIndexing}</p>
                         </div>
                     </div>
                 )}
 
-                <h3 className="text-[11px] font-black text-slate-600 uppercase tracking-[0.5em] mb-6 relative z-10">{t.summary}</h3>
+                <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.5em] mb-6 relative z-10">{t.summary}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-                    <div className="glass-panel p-6 rounded-[2rem] border-white/5 bg-white/5 hover:bg-white/[0.08] transition-all group active:scale-[0.98]">
-                        <div className="flex items-center gap-3 mb-4 text-slate-500 group-hover:text-indigo-400 transition-colors">
+                    <div className="glass-panel p-6 rounded-[2rem] border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/[0.08] transition-all group active:scale-[0.98]">
+                        <div className="flex items-center gap-3 mb-4 text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                             <DollarSign className="w-4 h-4" />
                             <span className="text-[9px] font-black uppercase tracking-[0.3em]">{t.aum}</span>
                         </div>
-                        <p className="text-3xl font-black text-white tracking-tighter tabular-nums">${(mockAUM / 1000000).toFixed(1)}M</p>
+                        <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter tabular-nums transition-colors duration-500">${(mockAUM / 1000000).toFixed(1)}M</p>
                     </div>
 
-                    <div className="glass-panel p-6 rounded-[2rem] border-white/5 bg-white/5 hover:bg-white/[0.08] transition-all group active:scale-[0.98]">
-                        <div className="flex items-center gap-3 mb-4 text-slate-500 group-hover:text-emerald-400 transition-colors">
+                    <div className="glass-panel p-6 rounded-[2rem] border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/[0.08] transition-all group active:scale-[0.98]">
+                        <div className="flex items-center gap-3 mb-4 text-slate-400 dark:text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                             <Percent className="w-4 h-4" />
                             <span className="text-[9px] font-black uppercase tracking-[0.3em]">{t.yield}</span>
                         </div>
-                        <p className="text-3xl font-black text-emerald-400 tracking-tighter tabular-nums">{(mockYield * 100).toFixed(2)}%</p>
+                        <p className="text-3xl font-black text-emerald-600 dark:text-emerald-400 tracking-tighter tabular-nums transition-colors duration-500">{(mockYield * 100).toFixed(2)}%</p>
                     </div>
 
-                    <div className="glass-panel p-6 rounded-[2rem] border-white/5 bg-white/5 hover:bg-white/[0.08] transition-all group active:scale-[0.98]">
-                        <div className="flex items-center gap-3 mb-4 text-slate-500 group-hover:text-rose-400 transition-colors">
+                    <div className="glass-panel p-6 rounded-[2rem] border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/[0.08] transition-all group active:scale-[0.98]">
+                        <div className="flex items-center gap-3 mb-4 text-slate-400 dark:text-slate-500 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
                             <TrendingUp className="w-4 h-4" />
                             <span className="text-[9px] font-black uppercase tracking-[0.3em]">{t.mdd}</span>
                         </div>
-                        <p className="text-3xl font-black text-rose-400 tracking-tighter tabular-nums">{(maxDrawdown * 100).toFixed(2)}%</p>
+                        <p className="text-3xl font-black text-rose-600 dark:text-rose-400 tracking-tighter tabular-nums transition-colors duration-500">{(maxDrawdown * 100).toFixed(2)}%</p>
                     </div>
 
-                    <div className="glass-panel p-6 rounded-[2rem] border-white/5 bg-white/5 hover:bg-white/[0.08] transition-all group active:scale-[0.98]">
-                        <div className="flex items-center gap-3 mb-4 text-slate-500 group-hover:text-indigo-400 transition-colors">
+                    <div className="glass-panel p-6 rounded-[2rem] border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/[0.08] transition-all group active:scale-[0.98]">
+                        <div className="flex items-center gap-3 mb-4 text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                             <BarChart2 className="w-4 h-4" />
                             <span className="text-[9px] font-black uppercase tracking-[0.3em]">{t.te}</span>
                         </div>
-                        <p className="text-3xl font-black text-indigo-400 tracking-tighter tabular-nums">
+                        <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400 tracking-tighter tabular-nums transition-colors duration-500">
                             {trackingError !== undefined ? (trackingError * 100).toFixed(2) + '%' : '—'}
                         </p>
                     </div>

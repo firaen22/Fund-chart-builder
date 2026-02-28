@@ -134,35 +134,35 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
     const activeMetrics = metricsConfig.filter(m => selectedMetrics[m.key]);
 
     return (
-        <div className="glass-panel rounded-[2.5rem] border-white/5 shadow-2xl overflow-hidden flex flex-col backdrop-blur-3xl">
-            <div className="px-8 py-6 bg-white/5 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="glass-panel rounded-[2.5rem] border-black/5 dark:border-white/5 shadow-2xl overflow-hidden flex flex-col backdrop-blur-3xl transition-colors duration-500">
+            <div className="px-8 py-6 bg-white/20 dark:bg-white/5 border-b border-black/5 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-colors duration-500">
                 <div className="flex items-center gap-4">
-                    <div className="glass-cta p-2.5 rounded-xl text-white shadow-xl">
+                    <div className="glass-cta p-2.5 rounded-xl text-white shadow-xl flex items-center justify-center">
                         <Calculator className="w-5 h-5" />
                     </div>
                     <div>
-                        <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">{t.title}</h3>
-                        <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">{t.subtitle}</p>
+                        <h3 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em]">{t.title}</h3>
+                        <p className="text-[9px] text-slate-500 dark:text-slate-500 font-bold uppercase tracking-widest mt-1">{t.subtitle}</p>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3 bg-black/20 p-1.5 rounded-2xl border border-white/5 shadow-inner">
-                    <div className="flex items-center gap-3 px-4 py-2 border-r border-white/5">
-                        <Calendar className="w-4 h-4 text-indigo-400" />
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t.dateRange}</span>
+                <div className="flex items-center gap-3 bg-white/40 dark:bg-black/20 p-1.5 rounded-2xl border border-black/5 dark:border-white/5 shadow-inner transition-colors duration-500">
+                    <div className="flex items-center gap-3 px-4 py-2 border-r border-black/5 dark:border-white/5">
+                        <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                        <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t.dateRange}</span>
                     </div>
                     <input
                         type="date"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
-                        className="text-xs font-mono font-black text-white bg-transparent border-none focus:ring-0 p-1 cursor-pointer"
+                        className="text-xs font-mono font-black text-slate-900 dark:text-white bg-transparent border-none focus:ring-0 p-1 cursor-pointer"
                     />
-                    <span className="text-slate-700 font-black">/</span>
+                    <span className="text-slate-300 dark:text-slate-700 font-black">/</span>
                     <input
                         type="date"
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
-                        className="text-xs font-mono font-black text-white bg-transparent border-none focus:ring-0 p-1 cursor-pointer"
+                        className="text-xs font-mono font-black text-slate-900 dark:text-white bg-transparent border-none focus:ring-0 p-1 cursor-pointer"
                     />
                 </div>
             </div>
@@ -176,10 +176,10 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
                             onClick={() => toggleMetric(metric.key)}
                             className={`flex items-center gap-3 px-5 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-95 ${selectedMetrics[metric.key]
                                 ? 'glass-cta shadow-indigo-500/10 border-indigo-500/30'
-                                : 'glass-button-secondary border-white/5 text-slate-500 hover:text-slate-300'
+                                : 'glass-button-secondary border-black/5 dark:border-white/5 text-slate-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-slate-300'
                                 }`}
                         >
-                            <div className={`w-5 h-5 rounded-lg flex items-center justify-center transition-all ${selectedMetrics[metric.key] ? 'bg-white text-indigo-600 shadow-lg' : 'bg-white/5'}`}>
+                            <div className={`w-5 h-5 rounded-lg flex items-center justify-center transition-all ${selectedMetrics[metric.key] ? 'bg-white text-indigo-600 shadow-lg' : 'bg-black/5 dark:bg-white/5'}`}>
                                 {selectedMetrics[metric.key] && <CheckCircle2 className="w-3.5 h-3.5 animate-in zoom-in duration-500 ease-out" />}
                             </div>
                             <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${selectedMetrics[metric.key] ? 'text-white' : 'text-inherit'}`}>
@@ -190,55 +190,55 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
                 </div>
 
                 {/* Results Table */}
-                <div className="overflow-hidden rounded-3xl border border-white/5 glass-panel bg-black/10 shadow-3xl">
+                <div className="overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 glass-panel bg-white/20 dark:bg-black/10 shadow-3xl">
                     <div className="overflow-x-auto custom-scrollbar">
                         <table className="w-full text-left border-collapse">
-                            <thead className="bg-white/5 text-[10px] font-black uppercase text-slate-500 tracking-[0.3em] border-b border-white/5">
+                            <thead className="bg-black/5 dark:bg-white/5 text-[10px] font-black uppercase text-slate-500 tracking-[0.3em] border-b border-black/5 dark:border-white/5">
                                 <tr>
-                                    <th className="px-8 py-5 bg-black/40 sticky left-0 z-10 backdrop-blur-xl border-r border-white/5">{t.fund}</th>
+                                    <th className="px-8 py-5 bg-white/60 dark:bg-black/40 sticky left-0 z-10 backdrop-blur-xl border-r border-black/5 dark:border-white/5">{t.fund}</th>
                                     {activeMetrics.map(m => (
-                                        <th key={m.key} className="px-8 py-5 whitespace-nowrap border-r border-white/5 last:border-0">
-                                            <div className="flex items-center gap-3 hover:text-white transition-colors">
-                                                <m.icon className={`w-4 h-4 text-indigo-400`} />
+                                        <th key={m.key} className="px-8 py-5 whitespace-nowrap border-r border-black/5 dark:border-white/5 last:border-0 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                                            <div className="flex items-center gap-3">
+                                                <m.icon className={`w-4 h-4 text-indigo-600 dark:text-indigo-400`} />
                                                 <span>{m.label}</span>
                                             </div>
                                         </th>
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5 font-mono text-xs">
+                            <tbody className="divide-y divide-black/5 dark:divide-white/5 font-mono text-xs">
                                 {dataset.funds.map((fund) => {
                                     const result = computedMetrics[fund];
                                     if (!result) return null;
 
                                     return (
-                                        <tr key={fund} className="hover:bg-white/5 transition-colors group">
-                                            <td className="px-8 py-5 font-black text-white bg-black/20 group-hover:bg-indigo-500/10 sticky left-0 border-r border-white/5 backdrop-blur-xl shadow-2xl transition-colors tracking-widest uppercase">
+                                        <tr key={fund} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors group">
+                                            <td className="px-8 py-5 font-black text-slate-900 dark:text-white bg-white/40 dark:bg-black/20 group-hover:bg-indigo-500/10 sticky left-0 border-r border-black/5 dark:border-white/5 backdrop-blur-xl shadow-2xl transition-colors tracking-widest uppercase">
                                                 {fund}
                                             </td>
                                             {activeMetrics.map(m => {
                                                 let value = result[m.key];
                                                 let displayValue = '—';
-                                                let colorClass = 'text-slate-400';
+                                                let colorClass = 'text-slate-500 dark:text-slate-400';
 
                                                 if (value !== undefined && value !== null && !isNaN(value)) {
                                                     if (m.key === 'cumulativeReturn' || m.key === 'maxDrawdown' || m.key === 'volatility' || m.key === 'alpha' || m.key === 'trackingError') {
                                                         displayValue = (value * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
                                                         if (m.key === 'cumulativeReturn' || m.key === 'alpha') {
-                                                            colorClass = value >= 0 ? 'text-emerald-400 font-black' : 'text-rose-400 font-black';
+                                                            colorClass = value >= 0 ? 'text-emerald-600 dark:text-emerald-400 font-black' : 'text-rose-600 dark:text-rose-400 font-black';
                                                         } else if (m.key === 'maxDrawdown') {
-                                                            colorClass = 'text-rose-400 font-black';
+                                                            colorClass = 'text-rose-600 dark:text-rose-400 font-black';
                                                         }
                                                     } else {
                                                         displayValue = value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                                                         if (m.key === 'sharpeRatio' || m.key === 'sortinoRatio') {
-                                                            colorClass = value > 1 ? 'text-emerald-400 font-black' : (value < 0 ? 'text-rose-400' : 'text-slate-300 font-black');
+                                                            colorClass = value > 1 ? 'text-emerald-600 dark:text-emerald-400 font-black' : (value < 0 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-600 dark:text-slate-300 font-black');
                                                         }
                                                     }
                                                 }
 
                                                 return (
-                                                    <td key={m.key} className={`px-8 py-5 tabular-nums border-r border-white/5 last:border-0 ${colorClass}`}>
+                                                    <td key={m.key} className={`px-8 py-5 tabular-nums border-r border-black/5 dark:border-white/5 last:border-0 ${colorClass}`}>
                                                         {displayValue}
                                                     </td>
                                                 );
@@ -250,7 +250,7 @@ export const FinancialMetrics: React.FC<Props> = ({ dataset, lang }) => {
                         </table>
                     </div>
                     {activeMetrics.length === 0 && (
-                        <div className="p-12 text-center text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] animate-pulse">
+                        <div className="p-12 text-center text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] animate-pulse">
                             {t.metrics}
                         </div>
                     )}
