@@ -41,22 +41,22 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSav
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-slate-800/80 backdrop-blur-lg border border-white/10 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-                <div className="px-6 py-4 bg-slate-900/50 border-b border-white/10 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="bg-brand-500/20 p-1.5 rounded-md text-brand-400">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl animate-in fade-in duration-300">
+            <div className="glass-panel rounded-[2rem] border-white/10 shadow-3xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300 backdrop-blur-3xl">
+                <div className="px-8 py-6 bg-white/5 border-b border-white/5 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="glass-cta p-2 rounded-xl text-white shadow-indigo-500/20">
                             <Key className="w-4 h-4" />
                         </div>
-                        <h3 className="font-bold text-white">{t.title}</h3>
+                        <h3 className="text-lg font-black text-white tracking-tight uppercase tracking-[0.1em]">{t.title}</h3>
                     </div>
-                    <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
+                    <button onClick={onClose} className="p-2 text-slate-500 hover:text-white hover:bg-white/5 rounded-xl transition-all">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
-                <div className="p-6 space-y-4">
-                    <p className="text-sm text-slate-300 leading-relaxed">
+                <div className="p-8 space-y-6">
+                    <p className="text-sm text-slate-400 font-medium leading-relaxed tracking-wide">
                         {t.desc}
                     </p>
 
@@ -65,27 +65,27 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSav
                         value={key}
                         onChange={(e) => setKey(e.target.value)}
                         placeholder={t.placeholder}
-                        className="w-full px-4 py-3 bg-black/20 border border-white/10 text-white rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all font-mono text-sm placeholder:text-slate-500"
+                        className="w-full px-5 py-4 glass-input rounded-2xl font-black focus:ring-indigo-500 transition-all text-sm placeholder:text-slate-600 tracking-wider shadow-inner"
                     />
 
-                    <div className="flex items-start gap-3 p-3 bg-brand-500/10 rounded-lg border border-brand-500/20">
-                        <ShieldCheck className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
-                        <p className="text-[10px] text-brand-200 leading-snug font-medium">
+                    <div className="flex items-start gap-4 p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 shadow-2xl">
+                        <ShieldCheck className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+                        <p className="text-[10px] text-slate-400 leading-normal font-bold uppercase tracking-widest">
                             {t.security}
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-3 pt-2">
+                    <div className="flex items-center gap-4 pt-4">
                         <button
                             onClick={onClose}
-                            className="flex-1 py-2.5 text-sm font-bold text-slate-300 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/10 transition-colors"
+                            className="flex-1 py-4 text-xs font-black uppercase tracking-[0.2em] text-slate-500 glass-button-secondary rounded-xl active:scale-[0.98]"
                         >
                             {t.cancel}
                         </button>
                         <button
                             onClick={handleSave}
                             disabled={!key.trim()}
-                            className="flex-1 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg text-sm font-bold shadow-lg shadow-brand-500/25 transition-transform duration-200 active:scale-[0.98] flex items-center justify-center gap-2"
+                            className={`flex-1 py-4 rounded-xl text-xs font-black uppercase tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-3 ${!key.trim() ? 'bg-white/5 text-slate-700 cursor-not-allowed border border-white/5' : 'glass-cta shadow-indigo-500/20 active:scale-[0.98]'}`}
                         >
                             <Save className="w-4 h-4" />
                             {t.save}

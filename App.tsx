@@ -138,7 +138,7 @@ const App: React.FC = () => {
   }, [dataset, viewMode]);
 
   return (
-    <div className="min-h-screen bg-surface-50 text-surface-900 selection:bg-brand-100 selection:text-brand-900" >
+    <div className="min-h-screen text-slate-100 selection:bg-indigo-500/30 selection:text-white pb-20" >
       <style>{`
         @keyframes shimmer {
           0% { background-position: 200% 0; }
@@ -149,7 +149,7 @@ const App: React.FC = () => {
           animation: shimmer 3s infinite linear;
         }
       `}</style>
-      <header className="sticky top-0 z-50 bg-slate-900/70 backdrop-blur-md border-b border-white/10">
+      <header className="sticky top-0 z-50 glass-panel border-b-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-brand-500 p-2 rounded-lg text-white shadow-lg">
@@ -166,7 +166,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 bg-black/20 p-1 rounded-md border border-white/10">
+            <div className="flex items-center gap-1 bg-black/40 p-1 rounded-lg border border-white/5">
               <button
                 onClick={() => setLang('en')}
                 className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${lang === 'en' ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-slate-400 hover:text-white'}`}
@@ -184,7 +184,7 @@ const App: React.FC = () => {
             {dataset && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-transform duration-200 ease-out active:scale-[0.98] bg-white/5 border border-white/10 hover:bg-white/10 rounded-md shadow-sm"
+                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold glass-button-secondary rounded-lg"
               >
                 <RefreshCcw className="w-3.5 h-3.5" />
                 {t.reset}
@@ -209,30 +209,31 @@ const App: React.FC = () => {
         lang={lang}
       />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-indigo-600/10 blur-[120px] -z-10 rounded-full" />
         {!dataset || !chartDataset ? (
           <div className="space-y-10 flex flex-col items-center justify-center min-h-[60vh] py-12">
             <div className="text-center max-w-xl space-y-4">
-              <div className="w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-brand-100">
-                <Globe className="w-8 h-8 text-brand-600" />
+              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10 shadow-2xl">
+                <Globe className="w-8 h-8 text-indigo-400" />
               </div>
-              <h2 className="text-3xl font-extrabold tracking-tight text-surface-900">{t.ingestion}</h2>
-              <p className="text-surface-500 font-medium leading-relaxed">
+              <h2 className="text-4xl font-black tracking-tight text-white mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">{t.ingestion}</h2>
+              <p className="text-slate-400 font-medium leading-relaxed max-w-md mx-auto">
                 {t.ingestionSub}
               </p>
             </div>
 
-            <div className="flex bg-black/5 backdrop-blur-sm p-1 rounded-xl border border-black/5 shadow-sm">
+            <div className="flex bg-black/40 backdrop-blur-md p-1.5 rounded-2xl border border-white/5 shadow-2xl">
               <button
                 onClick={() => setInputMode('upload')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-transform duration-200 ease-out active:scale-[0.98] ${inputMode === 'upload' ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md border border-brand-500/20' : 'text-slate-500 hover:text-slate-800 hover:bg-black/5'}`}
+                className={`flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition-all ${inputMode === 'upload' ? 'glass-cta shadow-indigo-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
               >
                 <FileUp className="w-4 h-4" />
                 {t.upload}
               </button>
               <button
                 onClick={() => setInputMode('restructure')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-transform duration-200 ease-out active:scale-[0.98] ${inputMode === 'restructure' ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md border border-brand-500/20' : 'text-slate-500 hover:text-slate-800 hover:bg-black/5'}`}
+                className={`flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition-all ${inputMode === 'restructure' ? 'glass-cta shadow-indigo-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
               >
                 <Database className="w-4 h-4" />
                 {t.builder}
@@ -241,16 +242,16 @@ const App: React.FC = () => {
 
             <div className="w-full max-w-4xl">
               <Suspense fallback={
-                <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-8 flex items-center justify-center min-h-[300px]">
-                  <div className="w-8 h-8 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
+                <div className="glass-panel rounded-[2rem] border-white/10 p-8 flex items-center justify-center min-h-[300px]">
+                  <div className="w-8 h-8 border-2 border-white/5 border-t-white/30 rounded-full animate-spin"></div>
                 </div>
               }>
                 {inputMode === 'upload' ? (
-                  <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
+                  <div className="glass-panel rounded-[2rem] border-white/5 overflow-hidden p-3 shadow-2xl">
                     <FileUpload onDataLoaded={handleDataLoaded} lang={lang} />
                   </div>
                 ) : (
-                  <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden p-2">
+                  <div className="glass-panel rounded-[2rem] border-white/5 overflow-hidden p-3 shadow-2xl">
                     <DataRestructurer onComplete={handleRestructureComplete} lang={lang} />
                   </div>
                 )}
@@ -268,17 +269,17 @@ const App: React.FC = () => {
           <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
               <div className="space-y-1">
-                <div className="flex bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm w-fit mb-4">
+                <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 shadow-2xl w-fit mb-6">
                   <button
                     onClick={() => setDashboardTab('analytics')}
-                    className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-transform duration-200 ease-out active:scale-[0.98] ${dashboardTab === 'analytics' ? 'bg-white text-brand-700 shadow-sm border border-surface-200' : 'text-surface-500 hover:text-surface-800 hover:bg-black/5'}`}
+                    className={`flex items-center gap-2 px-6 py-2.5 text-xs font-bold rounded-xl transition-all ${dashboardTab === 'analytics' ? 'bg-white/15 text-white shadow-lg border border-white/10' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
                   >
                     <Activity className="w-4 h-4" />
                     {t.analytics}
                   </button>
                   <button
                     onClick={() => setDashboardTab('agi')}
-                    className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-transform duration-200 ease-out active:scale-[0.98] ${dashboardTab === 'agi' ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md border border-brand-500/20' : 'text-surface-500 hover:text-surface-800 hover:bg-black/5'}`}
+                    className={`flex items-center gap-2 px-6 py-2.5 text-xs font-bold rounded-xl transition-all ${dashboardTab === 'agi' ? 'glass-cta' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
                   >
                     <Zap className="w-4 h-4" />
                     {t.agiManager}
@@ -288,20 +289,20 @@ const App: React.FC = () => {
                 {dashboardTab === 'analytics' && (
                   <>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-2 py-0.5 rounded border border-brand-100">{t.review}</span>
+                      <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">{t.review}</span>
                     </div>
-                    <h2 className="text-3xl font-extrabold tracking-tight text-surface-900">{t.perfTitle}</h2>
+                    <h2 className="text-3xl font-black tracking-tight text-white">{t.perfTitle}</h2>
                   </>
                 )}
               </div>
 
               {dashboardTab === 'analytics' && (
-                <div className="bg-surface-100 p-1 rounded-xl border border-surface-200 shadow-sm flex items-center">
+                <div className="bg-white/5 p-1 rounded-2xl border border-white/10 shadow-2xl flex items-center">
                   <button
                     onClick={() => setViewMode('normalized')}
-                    className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewMode === 'normalized'
-                      ? 'bg-white text-brand-700 shadow-md border border-surface-200'
-                      : 'text-surface-500 hover:text-surface-700'
+                    className={`flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-xl transition-all ${viewMode === 'normalized'
+                      ? 'bg-white/15 text-white shadow-lg border border-white/10'
+                      : 'text-slate-400 hover:text-slate-200'
                       }`}
                   >
                     <TrendingUp className="w-3.5 h-3.5" />
@@ -309,9 +310,9 @@ const App: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setViewMode('raw')}
-                    className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewMode === 'raw'
-                      ? 'bg-white text-brand-700 shadow-md border border-surface-200'
-                      : 'text-surface-500 hover:text-surface-700'
+                    className={`flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-xl transition-all ${viewMode === 'raw'
+                      ? 'bg-white/15 text-white shadow-lg border border-white/10'
+                      : 'text-slate-400 hover:text-slate-200'
                       }`}
                   >
                     <DollarSign className="w-3.5 h-3.5" />
@@ -323,11 +324,11 @@ const App: React.FC = () => {
 
             {dashboardTab === 'agi' ? (
               <div className="animate-in fade-in zoom-in-95 duration-500">
-                <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                <Suspense fallback={<div className="h-64 glass-panel rounded-[2rem] border-white/5 animate-pulse"></div>}>
                   <AGIPortfolioManager dataset={chartDataset} lang={lang} />
                 </Suspense>
                 <div className="mt-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-                  <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                  <Suspense fallback={<div className="h-64 glass-panel rounded-[2rem] border-white/5 animate-pulse"></div>}>
                     <ChatInterface
                       analysis={analysis}
                       isAnalyzing={isAnalyzing}
@@ -340,51 +341,51 @@ const App: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="bg-white p-8 rounded-3xl border border-surface-200 shadow-lg relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.03]">
-                    <Activity className="w-32 h-32 text-brand-600" />
+                <div className="glass-panel p-8 rounded-[2rem] border-white/5 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                    <Activity className="w-48 h-48 text-indigo-400" />
                   </div>
-                  <Suspense fallback={<div className="h-[500px] w-full animate-pulse bg-surface-50 rounded-xl"></div>}>
+                  <Suspense fallback={<div className="h-[500px] w-full animate-pulse bg-white/5 rounded-2xl"></div>}>
                     <FundChart dataset={chartDataset} viewMode={viewMode} lang={lang} />
                   </Suspense>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                    <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.records}</span>
+                  <div className="glass-panel p-6 rounded-2xl border-white/5 shadow-lg group glass-interactive">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">{t.records}</span>
                     <div className="flex items-end justify-between">
-                      <p className="text-3xl font-extrabold text-surface-900">{dataset.data.length.toLocaleString()}</p>
-                      <LineChart className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                      <p className="text-3xl font-black text-white">{dataset.data.length.toLocaleString()}</p>
+                      <LineChart className="w-8 h-8 text-indigo-400/20 group-hover:text-indigo-400/50 transition-colors" />
                     </div>
                   </div>
-                  <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                    <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.assets}</span>
+                  <div className="glass-panel p-6 rounded-2xl border-white/5 shadow-lg group glass-interactive">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">{t.assets}</span>
                     <div className="flex items-end justify-between">
-                      <p className="text-3xl font-extrabold text-surface-900">{dataset.funds.length}</p>
-                      <Database className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                      <p className="text-3xl font-black text-white">{dataset.funds.length}</p>
+                      <Database className="w-8 h-8 text-indigo-400/20 group-hover:text-indigo-400/50 transition-colors" />
                     </div>
                   </div>
-                  <div className="bg-white p-6 rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-shadow group">
-                    <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest block mb-2">{t.window}</span>
+                  <div className="glass-panel p-6 rounded-2xl border-white/5 shadow-lg group glass-interactive">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">{t.window}</span>
                     <div className="flex items-end justify-between">
-                      <p className="text-sm font-bold text-surface-900 leading-tight">
-                        <span className="text-brand-600 tabular-nums">{dataset.data[0]?.date}</span>
-                        <span className="block text-[10px] text-surface-400 my-0.5 uppercase tracking-tighter">{t.to}</span>
-                        <span className="text-brand-600 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
-                      </p>
-                      <Settings className="w-8 h-8 text-brand-200 group-hover:text-brand-400 transition-colors" />
+                      <div className="text-sm font-bold text-white leading-tight">
+                        <span className="text-indigo-300 tabular-nums">{dataset.data[0]?.date}</span>
+                        <span className="block text-[10px] text-slate-500 my-0.5 uppercase tracking-tighter opacity-70">{t.to}</span>
+                        <span className="text-indigo-300 tabular-nums">{dataset.data[dataset.data.length - 1]?.date}</span>
+                      </div>
+                      <Settings className="w-8 h-8 text-indigo-400/20 group-hover:text-indigo-400/50 transition-colors" />
                     </div>
                   </div>
                 </div>
 
                 <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                  <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                  <Suspense fallback={<div className="h-64 glass-panel rounded-[2rem] border-white/5 animate-pulse"></div>}>
                     <FinancialMetrics dataset={chartDataset} lang={lang} />
                   </Suspense>
                 </div>
 
                 <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-100">
-                  <Suspense fallback={<div className="h-64 border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                  <Suspense fallback={<div className="h-64 glass-panel rounded-[2rem] border-white/5 animate-pulse"></div>}>
                     <ChatInterface
                       analysis={analysis}
                       isAnalyzing={isAnalyzing}
@@ -396,7 +397,7 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-200">
-                  <Suspense fallback={<div className="h-[400px] border border-surface-200 rounded-3xl animate-pulse bg-white"></div>}>
+                  <Suspense fallback={<div className="h-[400px] glass-panel rounded-[2rem] border-white/5 animate-pulse"></div>}>
                     <HistoricalRegistry dataset={dataset} lang={lang} />
                   </Suspense>
                 </div>
@@ -406,11 +407,11 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <footer className="py-16 text-center border-t border-surface-200 mt-20 bg-white">
-        <div className="bg-brand-50 w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-4 border border-brand-100">
-          <Zap className="w-5 h-5 text-brand-600" />
+      <footer className="py-20 text-center border-t border-white/5 mt-20 bg-black/40 backdrop-blur-xl">
+        <div className="bg-white/5 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10 shadow-lg">
+          <Zap className="w-6 h-6 text-indigo-400" />
         </div>
-        <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-surface-400">
+        <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500">
           {lang === 'cn' ? '基金圖表構建器 — 企業版' : 'Fund Chart Builder — Enterprise Edition'}
         </p>
       </footer>

@@ -18,33 +18,37 @@ export const HistoricalRegistry: React.FC<Props> = ({ dataset, lang }) => {
     }[lang];
 
     return (
-        <div className="bg-white border border-surface-200 overflow-hidden shadow-lg rounded-3xl">
-            <div className="px-6 py-5 bg-surface-50 border-b border-surface-200 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></div>
-                    <h3 className="text-sm font-bold text-surface-900 uppercase tracking-widest">{t.registry}</h3>
+        <div className="glass-panel border-white/5 shadow-3xl rounded-[2.5rem] overflow-hidden backdrop-blur-3xl">
+            <div className="px-8 py-6 bg-white/5 border-b border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.6)] animate-pulse"></div>
+                    <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">{t.registry}</h3>
                 </div>
-                <BarChart3 className="w-4 h-4 text-surface-400" />
+                <div className="glass-cta p-2 rounded-lg text-white shadow-lg">
+                    <BarChart3 className="w-4 h-4" />
+                </div>
             </div>
-            <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                    <thead className="bg-surface-50/50 text-[10px] font-bold uppercase text-surface-400 tracking-widest border-b border-surface-100">
+            <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full text-left border-collapse">
+                    <thead className="bg-white/5 text-[10px] font-black uppercase text-slate-500 tracking-[0.3em] border-b border-white/5">
                         <tr>
-                            <th className="px-6 py-4">{lang === 'cn' ? '估值日期' : 'Date'}</th>
+                            <th className="px-8 py-5 border-r border-white/5 last:border-0">{lang === 'cn' ? '估值日期' : 'Valuation Date'}</th>
                             {dataset.funds.map(f => (
-                                <th key={f} className="px-6 py-4">
-                                    <span className="text-surface-900">{f}</span>
+                                <th key={f} className="px-8 py-5 border-r border-white/5 last:border-0">
+                                    <span className="text-slate-400 hover:text-white transition-colors">{f}</span>
                                 </th>
                             ))}
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-surface-100 font-mono text-xs">
+                    <tbody className="divide-y divide-white/5 font-mono text-xs">
                         {dataset.data.slice(0, 15).map((row, i) => (
-                            <tr key={i} className="hover:bg-brand-50/30 transition-colors group">
-                                <td className="px-6 py-4 font-bold text-surface-900">{row.date}</td>
+                            <tr key={i} className="hover:bg-white/5 transition-colors group">
+                                <td className="px-8 py-5 font-black text-white tabular-nums border-r border-white/5 group-hover:bg-indigo-500/10 transition-colors uppercase tracking-wider">{row.date}</td>
                                 {dataset.funds.map(f => (
-                                    <td key={f} className="px-6 py-4 text-surface-600 tabular-nums group-hover:text-brand-700">
-                                        {row[f] !== null && row[f] !== undefined ? (row[f] as number).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}
+                                    <td key={f} className="px-8 py-5 text-slate-400 tabular-nums border-r border-white/5 last:border-0 group-hover:text-indigo-400 transition-colors font-black">
+                                        {row[f] !== null && row[f] !== undefined ? (row[f] as number).toLocaleString(undefined, { minimumFractionDigits: 2 }) : (
+                                            <span className="text-slate-800 italic opacity-50">NULL</span>
+                                        )}
                                     </td>
                                 ))}
                             </tr>
@@ -53,7 +57,7 @@ export const HistoricalRegistry: React.FC<Props> = ({ dataset, lang }) => {
                 </table>
             </div>
             {dataset.data.length > 15 && (
-                <div className="px-6 py-4 bg-surface-50 text-[10px] text-surface-400 font-medium text-center border-t border-surface-100 italic">
+                <div className="px-8 py-5 bg-black/20 text-[10px] text-slate-500 font-black uppercase tracking-[0.25em] text-center border-t border-white/5 italic">
                     Truncated showing top 15 records out of {dataset.data.length}
                 </div>
             )}

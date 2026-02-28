@@ -109,83 +109,83 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
 
   if (step === 'reconcile' && finalDatasetPreview) {
     return (
-      <div className="w-full max-w-7xl mx-auto space-y-6 animate-in fade-in zoom-in duration-500">
-        <div className="bg-surface-900 p-8 text-white shadow-2xl rounded-3xl border border-surface-800 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-[0.05]">
-            <ShieldCheck className="w-32 h-32" />
+      <div className="w-full max-w-7xl mx-auto space-y-6 animate-in fade-in zoom-in duration-700">
+        <div className="glass-panel p-10 text-white shadow-2xl rounded-[2.5rem] border-white/5 relative overflow-hidden backdrop-blur-3xl">
+          <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+            <ShieldCheck className="w-48 h-48" />
           </div>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-            <div className="flex items-center gap-6">
-              <div className="w-16 h-16 rounded-2xl bg-brand-600 flex items-center justify-center text-white shadow-lg">
-                <CheckCircle2 className="w-8 h-8" />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-10 relative z-10">
+            <div className="flex items-center gap-8">
+              <div className="w-20 h-20 rounded-2xl glass-cta flex items-center justify-center text-white shadow-2xl">
+                <CheckCircle2 className="w-10 h-10" />
               </div>
               <div>
-                <h2 className="text-2xl font-extrabold tracking-tight">{t.auditTitle}</h2>
-                <div className="flex gap-4 mt-1">
-                  <span className="text-surface-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
-                    <Database className="w-3 h-3" /> {finalDatasetPreview.data.length} {t.validated}
+                <h2 className="text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">{t.auditTitle}</h2>
+                <div className="flex gap-6 mt-2">
+                  <span className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                    <Database className="w-3.5 h-3.5 text-indigo-400" /> {finalDatasetPreview.data.length} {t.validated}
                   </span>
-                  <span className="text-brand-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
-                    <Bookmark className="w-3 h-3" /> {t.auditSub}
+                  <span className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                    <Bookmark className="w-3.5 h-3.5" /> {t.auditSub}
                   </span>
                 </div>
               </div>
             </div>
-            <div className="flex gap-3">
-              <button onClick={() => setStep('input')} className="px-5 py-2.5 bg-surface-800 hover:bg-surface-700 text-white rounded-xl text-xs font-bold transition-all border border-surface-700">{t.back}</button>
-              <button onClick={() => onComplete(finalDatasetPreview)} className="px-8 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-lg transition-all duration-300 ease-out active:scale-[0.98] flex items-center gap-2 bg-gradient-to-r from-brand-500 via-brand-400 to-brand-500 animate-shimmer hover:shadow-brand-500/25">
+            <div className="flex gap-4">
+              <button onClick={() => setStep('input')} className="px-6 py-3.5 glass-button-secondary rounded-xl text-xs font-black uppercase tracking-widest">{t.back}</button>
+              <button onClick={() => onComplete(finalDatasetPreview)} className="px-10 py-3.5 glass-cta rounded-xl text-xs font-black uppercase tracking-[0.1em] shadow-indigo-500/20 flex items-center gap-3">
                 {t.launch} <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl border border-surface-200 shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
-          <div className="w-full md:w-80 bg-surface-50 p-10 border-r border-surface-200 space-y-10">
-            <div className="flex items-center gap-2">
-              <Wand2 className="w-4 h-4 text-brand-600" />
-              <h3 className="text-[10px] font-bold text-surface-900 uppercase tracking-widest">{t.policy}</h3>
+        <div className="glass-panel rounded-[2.5rem] border-white/5 shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[650px] backdrop-blur-3xl">
+          <div className="w-full md:w-80 bg-black/20 p-10 border-r border-white/5 space-y-12">
+            <div className="flex items-center gap-3">
+              <Wand2 className="w-5 h-5 text-indigo-400" />
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{t.policy}</h3>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {t.strategies.map(s => (
                 <button
                   key={s.id}
                   onClick={() => setAlignmentStrategy(s.id as any)}
-                  className={`w-full text-left p-5 rounded-2xl border transition-all ${alignmentStrategy === s.id ? 'border-brand-500 bg-white shadow-md ring-1 ring-brand-500' : 'border-surface-200 opacity-60 hover:opacity-100 hover:bg-white'}`}
+                  className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 ${alignmentStrategy === s.id ? 'border-indigo-500/50 bg-indigo-500/10 shadow-2xl shadow-indigo-500/10' : 'border-white/5 opacity-40 hover:opacity-100 hover:bg-white/5'}`}
                 >
-                  <p className="text-xs font-extrabold text-surface-900 uppercase tracking-tight mb-1">{s.label}</p>
-                  <p className="text-[10px] text-surface-500 font-medium leading-relaxed">{s.desc}</p>
+                  <p className="text-xs font-black text-white uppercase tracking-wider mb-1.5">{s.label}</p>
+                  <p className="text-[10px] text-slate-400 font-medium leading-relaxed tracking-wide">{s.desc}</p>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="flex-grow overflow-auto">
+          <div className="flex-grow overflow-auto custom-scrollbar bg-black/5">
             <table className="w-full text-left border-collapse font-mono text-[11px]">
-              <thead className="sticky top-0 bg-white z-20 border-b border-surface-200">
+              <thead className="sticky top-0 bg-slate-900 shadow-xl z-20 border-b border-white/5">
                 <tr>
-                  <th className="p-5 bg-surface-50 font-bold uppercase text-surface-400 tracking-widest">{t.temporalIndex}</th>
+                  <th className="p-6 bg-black/40 font-black uppercase text-slate-500 tracking-[0.2em]">{t.temporalIndex}</th>
                   {finalDatasetPreview.funds.map(f => (
-                    <th key={f} className="p-5 font-extrabold uppercase text-surface-900 tracking-tight">
+                    <th key={f} className="p-6 font-black uppercase text-white tracking-widest bg-black/20">
                       <div className="flex flex-col">
-                        <span>{f}</span>
-                        <span className="text-[9px] text-surface-400 normal-case font-medium">{finalDatasetPreview.metadata?.[f]?.description}</span>
+                        <span className="text-indigo-400">{f}</span>
+                        <span className="text-[9px] text-slate-500 normal-case font-medium mt-1 tracking-tight">{finalDatasetPreview.metadata?.[f]?.description}</span>
                       </div>
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-surface-100">
+              <tbody className="divide-y divide-white/5">
                 {finalDatasetPreview.data.map((row, i) => (
-                  <tr key={i} className="hover:bg-surface-50 transition-colors group">
-                    <td className="p-5 font-bold text-surface-900 border-r border-surface-100 tabular-nums">{row.date}</td>
+                  <tr key={i} className="hover:bg-white/5 transition-colors group">
+                    <td className="p-6 font-black text-white border-r border-white/5 tabular-nums tracking-wider">{row.date}</td>
                     {finalDatasetPreview.funds.map(f => (
-                      <td key={f} className={`p-5 tabular-nums ${row[`_synthetic_${f}`] ? 'text-brand-600 font-extrabold' : 'text-surface-600 font-medium'}`}>
+                      <td key={f} className={`p-6 tabular-nums ${row[`_synthetic_${f}`] ? 'text-indigo-400 font-black' : 'text-slate-300 font-medium'}`}>
                         <div className="flex items-center justify-between">
                           {row[f] !== null ? (row[f] as number).toLocaleString(undefined, { minimumFractionDigits: 2 }) : (
-                            <span className="text-surface-300 text-[10px] font-bold italic">{t.absent}</span>
+                            <span className="text-slate-600 text-[10px] font-black italic tracking-widest">{t.absent}</span>
                           )}
-                          {row[`_synthetic_${f}`] && <History className="w-3.5 h-3.5 opacity-50 ml-2" />}
+                          {row[`_synthetic_${f}`] && <History className="w-4 h-4 opacity-40 ml-3" />}
                         </div>
                       </td>
                     ))}
@@ -200,47 +200,47 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
   }
 
   return (
-    <div className="w-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-surface-200">
-      <div className="flex-grow p-10 lg:p-14 space-y-10">
-        <div className="space-y-1">
-          <div className="bg-brand-50 px-2 py-1 rounded text-brand-600 text-[10px] font-bold uppercase tracking-widest inline-flex items-center gap-1 mb-2">
-            <Layers className="w-3 h-3" /> {t.assemblerSub}
+    <div className="w-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-white/5">
+      <div className="flex-grow p-10 lg:p-14 space-y-12">
+        <div className="space-y-2">
+          <div className="bg-indigo-500/10 px-3 py-1.5 rounded-xl text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] inline-flex items-center gap-2 mb-3 border border-indigo-500/20 shadow-lg shadow-indigo-500/10">
+            <Layers className="w-4 h-4" /> {t.assemblerSub}
           </div>
-          <h2 className="text-2xl font-extrabold text-surface-900 tracking-tight">{t.assembler}</h2>
+          <h2 className="text-3xl font-black text-white tracking-tight">{t.assembler}</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-surface-400 uppercase tracking-widest flex items-center gap-2">
-              <Hash className="w-3.5 h-3.5 text-brand-500" /> {t.symbol}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-3">
+            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-3">
+              <Hash className="w-4 h-4 text-indigo-500" /> {t.symbol}
             </label>
             <input
               type="text"
               placeholder="e.g. BTC-USD"
-              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-bold focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-sm placeholder:text-surface-300"
+              className="w-full px-5 py-4 glass-input rounded-2xl font-black focus:ring-indigo-500 transition-all text-sm placeholder:text-slate-600 tracking-wider"
               value={currentCode}
               onChange={e => setCurrentCode(e.target.value.toUpperCase())}
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-surface-400 uppercase tracking-widest flex items-center gap-2">
-              <FileText className="w-3.5 h-3.5 text-brand-500" /> {t.description}
+          <div className="space-y-3">
+            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-3">
+              <FileText className="w-4 h-4 text-indigo-500" /> {t.description}
             </label>
             <input
               type="text"
               placeholder="e.g. Digital Gold"
-              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-medium focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-sm placeholder:text-surface-300"
+              className="w-full px-5 py-4 glass-input rounded-2xl font-bold focus:ring-indigo-500 transition-all text-sm placeholder:text-slate-600 tracking-wide"
               value={currentDescription}
               onChange={e => setCurrentDescription(e.target.value)}
             />
           </div>
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-[10px] font-bold text-surface-400 uppercase tracking-widest flex items-center gap-2">
-              <ClipboardPaste className="w-3.5 h-3.5 text-brand-500" /> {t.navSet}
+          <div className="space-y-3 md:col-span-2">
+            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-3">
+              <ClipboardPaste className="w-4 h-4 text-indigo-500" /> {t.navSet}
             </label>
             <textarea
               placeholder="Date,Value..."
-              className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl font-mono text-xs h-32 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all resize-none placeholder:text-surface-300"
+              className="w-full px-5 py-4 glass-input rounded-2xl font-mono text-xs h-40 focus:ring-indigo-500 transition-all resize-none placeholder:text-slate-600 shadow-inner"
               value={currentText}
               onChange={e => setCurrentText(e.target.value)}
             />
@@ -250,49 +250,54 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
         <button
           onClick={handleCommit}
           disabled={!currentCode || !currentText}
-          className="w-full py-4 bg-brand-600 hover:bg-brand-700 disabled:bg-surface-200 text-white rounded-xl font-bold text-sm transition-all duration-200 ease-out shadow-lg flex items-center justify-center gap-2 active:scale-[0.98]"
+          className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-3 shadow-2xl ${(!currentCode || !currentText) ? 'bg-white/5 text-slate-600 cursor-not-allowed border border-white/5' : 'glass-cta shadow-indigo-500/20'}`}
         >
-          <PlusCircle className="w-4 h-4" /> {t.commit}
+          <PlusCircle className="w-5 h-5" /> {t.commit}
         </button>
 
-        <div className="p-5 bg-surface-50 rounded-2xl border border-surface-200 flex gap-4">
-          <Info className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
-          <div className="text-[11px] text-surface-500 font-medium leading-relaxed space-y-2">
-            {t.guide.map((g, i) => <div key={i} className="flex gap-2"><span>{i + 1}.</span>{g}</div>)}
+        <div className="p-6 bg-white/5 rounded-2xl border border-white/5 flex gap-5 shadow-2xl backdrop-blur-md">
+          <Info className="w-6 h-6 text-indigo-400 shrink-0 mt-0.5" />
+          <div className="text-[11px] text-slate-400 font-medium leading-relaxed space-y-3 tracking-wide">
+            {t.guide.map((g, i) => (
+              <div key={i} className="flex gap-3">
+                <span className="text-indigo-300 font-black">0{i + 1}</span>
+                <span className="border-l border-white/10 pl-3">{g}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="w-full md:w-[380px] p-10 lg:p-14 bg-surface-900 text-white flex flex-col">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-brand-400"></div>
-            <h4 className="text-[10px] font-bold uppercase tracking-widest text-brand-400">{t.vaulted}</h4>
+      <div className="w-full md:w-[420px] p-10 lg:p-14 bg-black/30 backdrop-blur-3xl border-l border-white/5 flex flex-col">
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-3">
+            <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)] animate-pulse"></div>
+            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-400">{t.vaulted}</h4>
           </div>
-          <span className="px-2 py-0.5 bg-brand-500/20 text-brand-300 text-[10px] font-bold rounded border border-brand-500/30">{entries.length}</span>
+          <span className="px-3 py-1 bg-white/5 text-white text-[10px] font-black rounded-lg border border-white/10 shadow-lg">{entries.length} Assets</span>
         </div>
 
-        <div className="flex-grow space-y-3 overflow-y-auto pr-2 custom-scrollbar">
+        <div className="flex-grow space-y-4 overflow-y-auto pr-2 custom-scrollbar">
           {!entries.length ? (
-            <div className="h-full flex flex-col items-center justify-center opacity-40 text-center space-y-4">
-              <div className="p-4 bg-white/5 rounded-full backdrop-blur-sm border border-white/5">
-                <LayoutGrid className="w-8 h-8 text-white" />
+            <div className="h-full flex flex-col items-center justify-center opacity-20 text-center space-y-6">
+              <div className="p-8 bg-white/5 rounded-full backdrop-blur-2xl border border-white/10 shadow-2xl">
+                <LayoutGrid className="w-12 h-12 text-white" />
               </div>
-              <p className="text-[10px] font-bold text-white uppercase tracking-widest">{t.empty}</p>
+              <p className="text-[10px] font-black text-white uppercase tracking-[0.4em]">{t.empty}</p>
             </div>
           ) : (
             entries.map((e, i) => (
-              <div key={i} style={{ animationDelay: `${i * 50}ms` }} className="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-white/5 flex justify-between items-center group animate-in fade-in slide-in-from-right-8 duration-500 ease-out fill-mode-both hover:-translate-y-0.5 hover:bg-white/10 transition-all shadow-sm">
+              <div key={i} style={{ animationDelay: `${i * 100}ms` }} className="bg-white/5 backdrop-blur-xl p-5 rounded-2xl border border-white/5 flex justify-between items-center group animate-in fade-in slide-in-from-right-8 duration-700 ease-out fill-mode-both hover:-translate-y-1 hover:bg-white/10 transition-all shadow-xl hover:shadow-indigo-500/5 hover:border-white/10">
                 <div className="flex flex-col min-w-0">
-                  <span className="font-extrabold text-white text-sm tracking-tight truncate">{e.code}</span>
-                  <span className="text-[10px] text-slate-300 font-medium truncate block mb-1">{e.description}</span>
-                  <div className="flex items-center gap-1.5 text-[9px] text-brand-300 font-bold uppercase tracking-tighter">
-                    <Calendar className="w-3 h-3" />
+                  <span className="font-black text-white text-sm tracking-widest truncate uppercase">{e.code}</span>
+                  <span className="text-[10px] text-slate-500 font-bold truncate block mb-2 tracking-wide">{e.description}</span>
+                  <div className="flex items-center gap-2.5 text-[9px] text-indigo-400 font-black uppercase tracking-widest">
+                    <Calendar className="w-3.5 h-3.5" />
                     {parseRawPastedData(e.rawText).length} {t.points}
                   </div>
                 </div>
-                <button onClick={() => setEntries(p => p.filter((_, idx) => idx !== i))} className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/20 rounded-lg transition-all duration-200 ease-out hover:scale-110 active:scale-90 shrink-0">
-                  <Trash2 className="w-4 h-4" />
+                <button onClick={() => setEntries(p => p.filter((_, idx) => idx !== i))} className="p-2.5 text-slate-600 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all duration-300 ease-out hover:rotate-90 active:scale-75 shrink-0 border border-transparent hover:border-red-400/20">
+                  <Trash2 className="w-5 h-5" />
                 </button>
               </div>
             ))
@@ -302,6 +307,7 @@ export const DataRestructurer: React.FC<DataRestructurerProps> = ({ onComplete, 
         <button
           onClick={startReconciliation}
           disabled={!entries.length}
+          className={`mt-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-3 shadow-2xl ${!entries.length ? 'bg-white/5 text-slate-600 cursor-not-allowed border border-white/5' : 'glass-cta shadow-indigo-500/20'}`}
         >
           {t.execute} <ArrowRight className="w-4 h-4" />
         </button>
