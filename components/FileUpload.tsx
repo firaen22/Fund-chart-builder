@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
-import { CloudUpload, FileText, Play, Info, CheckCircle2, Calendar, FileType, Lock, ArrowRight } from 'lucide-react';
+import { CloudUpload, FileText, Play, Info, CheckCircle2, Calendar, FileType, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { generateDemoData } from '../utils/csvParser';
-import { Language } from '../types';
+import { Language, FundDataset } from '../types';
+import { parseXLSX } from '../utils/xlsxHandler';
 
 interface FileUploadProps {
   onDataLoaded: (csvContent: string) => void;
+  onDatasetLoaded?: (dataset: FundDataset) => void;
   lang: Language;
 }
 
-export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) => {
+export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, onDatasetLoaded, lang }) => {
   const [dragActive, setDragActive] = useState(false);
+  const [xlsxLoading, setXlsxLoading] = useState(false);
+  const [xlsxError, setXlsxError] = useState<string | null>(null);
 
   const t = {
     en: {
       gateway: "Upload Dataset",
       import: "Initialize performance analytics",
-      secure: "Drag & drop CSV records",
-      awaiting: "Supports comma-separated NAV history",
+      secure: "Drag & drop CSV or XLSX files",
+      awaiting: "Supports CSV and Excel spreadsheet formats",
       init: "Select File",
       sample: "Try Sample Dataset",
       standards: "Schema Requirements",
@@ -29,8 +33,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
     cn: {
       gateway: "上傳數據集",
       import: "初始化績效分析",
-      secure: "拖放 CSV 紀錄",
-      awaiting: "支持以逗號分隔的淨值歷史",
+      secure: "拖放 CSV 或 XLSX 檔案",
+      awaiting: "支持 CSV 和 Excel 試算表格式",
       init: "選擇文件",
       sample: "嘗試示例數據",
       standards: "架構要求",
@@ -54,9 +58,33 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
   };
 
   const handleFile = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => e.target?.result && onDataLoaded(e.target.result as string);
-    reader.readAsText(file);
+    setXlsxError(null);
+    const ext = file.name.split('.').pop()?.toLowerCase();
+
+    if (ext === 'xlsx' || ext === 'xls') {
+      // XLSX import
+      setXlsxLoading(true);
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const buffer = e.target?.result as ArrayBuffer;
+          const dataset = await parseXLSX(buffer);
+          if (onDatasetLoaded) {
+            onDatasetLoaded(dataset);
+          }
+        } catch (err: any) {
+          setXlsxError(err?.message || 'Failed to parse XLSX file');
+        } finally {
+          setXlsxLoading(false);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      // CSV import (existing behavior)
+      const reader = new FileReader();
+      reader.onload = (e) => e.target?.result && onDataLoaded(e.target.result as string);
+      reader.readAsText(file);
+    }
   };
 
   return (
@@ -82,10 +110,15 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, lang }) =>
           <p className="text-slate-900 dark:text-white font-black text-xl mb-1 tracking-tight">{t.secure}</p>
           <p className="text-xs text-slate-500 dark:text-slate-400 mb-10 font-medium tracking-wide">{t.awaiting}</p>
 
-          <label className="cursor-pointer glass-cta py-4 px-10 rounded-xl text-sm font-bold shadow-2xl flex items-center gap-3 active:scale-95 transition-transform">
-            {t.init}
-            <input type="file" className="hidden" accept=".csv" onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
+          <label className={`cursor-pointer glass-cta py-4 px-10 rounded-xl text-sm font-bold shadow-2xl flex items-center gap-3 active:scale-95 transition-transform ${xlsxLoading ? 'opacity-60 pointer-events-none' : ''}`}>
+            {xlsxLoading ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> {lang === 'cn' ? '載入中...' : 'Loading...'}</>
+            ) : t.init}
+            <input type="file" className="hidden" accept=".csv,.xlsx,.xls" onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
           </label>
+          {xlsxError && (
+            <p className="text-xs text-rose-500 font-semibold mt-3 animate-in fade-in">{xlsxError}</p>
+          )}
         </div>
 
         <div className="flex items-center justify-center">
